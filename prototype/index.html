@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>变更风控 - 变更列表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#003eb3',
+                        secondary: '#f0f5ff',
+                    },
+                    borderRadius: {
+                        'sm': '4px',
+                        'md': '8px',
+                        'lg': '12px',
+                        'xl': '16px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .sidebar-transition { transition: width 0.3s ease-in-out; }
+        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); }
+        .custom-gradient { background: linear-gradient(135deg, #003eb3 0%, #0050e3 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 overflow-hidden">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar-transition w-64 bg-white border-r border-gray-200 flex flex-col z-30">
+            <div class="p-6 flex items-center gap-3">
+                <div class="w-8 h-8 custom-gradient rounded-lg flex items-center justify-center text-white">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <span id="logo-text" class="font-bold text-lg tracking-tight">变更风控系统</span>
+            </div>
+            
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a href="index.html" class="flex items-center gap-3 px-3 py-2 bg-secondary text-primary rounded-md font-medium">
+                    <i data-lucide="list" class="w-5 h-5"></i>
+                    <span class="nav-text">变更列表</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span class="nav-text">仪表盘</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span class="nav-text">系统设置</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button id="toggle-sidebar" class="flex items-center justify-center w-full p-2 hover:bg-gray-100 rounded-md text-gray-400">
+                    <i data-lucide="chevron-left" id="toggle-icon" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <!-- Header -->
+            <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 z-20">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-xl font-semibold">变更列表</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span>Admin</span>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-full text-gray-500">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <!-- Search Section -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-gray-500">变更标题</label>
+                            <input type="text" id="search-title" placeholder="请输入标题" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-gray-500">等级</label>
+                            <select id="search-level" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <option value="">全部</option>
+                                <option value="P0">P0</option>
+                                <option value="P1">P1</option>
+                                <option value="P2">P2</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-gray-500">状态</label>
+                            <select id="search-status" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <option value="">全部</option>
+                                <option value="执行中">执行中</option>
+                                <option value="已成功">已成功</option>
+                                <option value="已回滚">已回滚</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-gray-500">变更模版</label>
+                            <select id="search-template" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                <option value="">全部</option>
+                                <option value="RDMA Agent 配置变更">RDMA Agent 配置变更</option>
+                                <option value="RDMA 配置检查">RDMA 配置检查</option>
+                                <option value="RDMA Agent 版本升级">RDMA Agent 版本升级</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-gray-500">变更人</label>
+                            <input type="text" id="search-user" placeholder="请输入姓名" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button id="search-btn" class="flex-1 px-4 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">查询</button>
+                            <button id="reset-btn" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors">重置</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="flex justify-between items-center mb-4">
+                    <div id="data-count" class="text-sm text-gray-500">共 2 条数据</div>
+                    <button id="open-drawer" class="flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    发起变更
+                </button>
+                </div>
+
+                <!-- Table Section -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-4 font-semibold text-gray-600">变更标题</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">等级</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">状态</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">审批单</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">变更模版</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">变更人</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">进度</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-gray-100">
+                            <!-- Data will be rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 bg-white border border-gray-100 shadow-xl rounded-lg flex items-center gap-3 transform -translate-y-20 transition-transform duration-300 pointer-events-none">
+        <div id="toast-icon" class="w-6 h-6 rounded-full flex items-center justify-center text-white"></div>
+        <span id="toast-message" class="text-sm font-medium text-gray-700"></span>
+    </div>
+
+    <!-- Drawer: Create Change -->
+    <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden opacity-0 transition-opacity duration-300"></div>
+    <div id="drawer" class="fixed right-0 top-0 h-full w-[800px] bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-xl font-bold text-gray-800">发起新变更 (Create Change)</h2>
+                <button id="close-drawer" class="p-2 hover:bg-gray-100 rounded-full text-gray-400">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <p class="text-sm text-gray-400">Follow the standardized process to minimize risk.</p>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="px-12 py-6 border-b border-gray-50 bg-gray-50/30">
+            <div class="flex items-center justify-between relative">
+                <div class="absolute top-1/2 left-0 w-full h-px bg-gray-200 -translate-y-1/2 z-0"></div>
+                
+                <!-- Step 1 -->
+                <div class="step-nav relative z-10 flex items-center gap-3 bg-gray-50 pr-4" data-step="1">
+                    <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-primary/30">1</div>
+                    <span class="text-sm font-bold text-primary">基本信息</span>
+                </div>
+                <!-- Step 2 -->
+                <div class="step-nav relative z-10 flex items-center gap-3 bg-gray-50 px-4 opacity-50" data-step="2">
+                    <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">2</div>
+                    <span class="text-sm font-bold text-gray-400">选择模板</span>
+                </div>
+                <!-- Step 3 -->
+                <div class="step-nav relative z-10 flex items-center gap-3 bg-gray-50 px-4 opacity-50" data-step="3">
+                    <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">3</div>
+                    <span class="text-sm font-bold text-gray-400">策略配置</span>
+                </div>
+                <!-- Step 4 -->
+                <div class="step-nav relative z-10 flex items-center gap-3 bg-gray-50 pl-4 opacity-50" data-step="4">
+                    <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">4</div>
+                    <span class="text-sm font-bold text-gray-400">预览提交</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step Content Container -->
+        <div id="step-content" class="flex-1 overflow-y-auto p-8">
+            <!-- Content will be dynamically swapped here -->
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="p-6 border-t border-gray-100 flex items-center justify-between bg-white">
+            <button id="prev-step" class="px-8 py-2 border border-gray-200 text-gray-600 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors hidden">Back</button>
+            <button id="cancel-drawer" class="px-8 py-2 border border-gray-200 text-gray-600 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors">Cancel</button>
+            <button id="next-step" class="px-8 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors flex items-center gap-2">
+                <span>Next Step</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- Data & Mocking ---
+        let changeData = [
+            {
+                id: 'CHG-20260202-001',
+                title: '北京机房核心交换机配置更新',
+                time: '2026-02-02 10:00',
+                level: 'P0',
+                status: '执行中',
+                oa: 'OA-20260202-001',
+                template: 'RDMA Agent 配置变更',
+                user: '张三',
+                progress: 65,
+                count: '130/200'
+            },
+            {
+                id: 'CHG-20260201-042',
+                title: '上海区域 Agent 版本例行升级',
+                time: '2026-02-01 14:30',
+                level: 'P1',
+                status: '已成功',
+                oa: 'OA-20260201-042',
+                template: 'RDMA Agent 版本升级',
+                user: '李四',
+                progress: 100,
+                count: '500/500'
+            }
+        ];
+
+        // --- UI Elements ---
+        const tableBody = document.getElementById('table-body');
+        const dataCount = document.getElementById('data-count');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawer-overlay');
+        const stepContent = document.getElementById('step-content');
+        const nextStepBtn = document.getElementById('next-step');
+        const prevStepBtn = document.getElementById('prev-step');
+        const cancelDrawerBtn = document.getElementById('cancel-drawer');
+        const stepNavs = document.querySelectorAll('.step-nav');
+        
+        let currentStep = 1;
+        const formData = {
+            title: '',
+            targets: '',
+            time: '',
+            scene: '日常变更 (Daily Change)',
+            template: null,
+            version: '',
+            strategy: '4 Batches (1%, 10%, 50%, 100%)'
+        };
+
+        // --- Core Functions ---
+        const toggleDrawer = (open) => {
+            if (open) {
+                drawer.classList.remove('translate-x-full');
+                drawerOverlay.classList.remove('hidden');
+                setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
+                renderStep(1);
+            } else {
+                drawer.classList.add('translate-x-full');
+                drawerOverlay.classList.add('opacity-0');
+                setTimeout(() => drawerOverlay.classList.add('hidden'), 300);
+                // Reset form on close
+                currentStep = 1;
+                formData.title = '';
+                formData.template = null;
+            }
+        };
+
+        const showToast = (type, message) => {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            const msg = document.getElementById('toast-message');
+            
+            icon.className = `w-6 h-6 rounded-full flex items-center justify-center text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            icon.innerHTML = `<i data-lucide="${type === 'success' ? 'check' : 'alert-circle'}" class="w-4 h-4"></i>`;
+            msg.innerText = message;
+            
+            toast.classList.remove('-translate-y-20');
+            toast.classList.add('translate-y-4');
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.add('-translate-y-20');
+                toast.classList.remove('translate-y-4');
+            }, 3000);
+        };
+
+        const renderTable = (data) => {
+            tableBody.innerHTML = data.length ? '' : '<tr><td colspan="8" class="px-6 py-12 text-center text-gray-400">暂无数据</td></tr>';
+            data.forEach(item => {
+                const statusColor = item.status === '执行中' ? 'blue' : (item.status === '已成功' ? 'green' : 'gray');
+                const levelColor = item.level === 'P0' ? 'red' : (item.level === 'P1' ? 'yellow' : 'blue');
+                
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-gray-900">${item.title}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-1 bg-${levelColor}-50 text-${levelColor}-600 rounded text-xs font-bold">${item.level}</span></td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-${statusColor}-500"></span>
+                            <span class="text-gray-600">${item.status}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-primary hover:underline cursor-pointer font-medium">${item.oa}</td>
+                    <td class="px-6 py-4 text-gray-500">${item.template}</td>
+                    <td class="px-6 py-4 text-gray-600">${item.user}</td>
+                    <td class="px-6 py-4">
+                        <div class="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-${statusColor}-500" style="width: ${item.progress}%"></div>
+                        </div>
+                        <div class="text-[10px] text-gray-400 mt-1">${item.count} Nodes</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button class="text-primary hover:text-blue-800 font-bold" onclick="location.href='detail.html'">详情</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            dataCount.innerText = `共 ${data.length} 条数据`;
+        };
+
+        const renderStep = (step) => {
+            currentStep = step;
+            updateStepIndicator();
+            
+            if (step === 1) {
+                stepContent.innerHTML = `
+                    <div class="space-y-8">
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-gray-700">变更标题 <span class="text-red-500">*</span></label>
+                            <input type="text" id="fd-title" value="${formData.title}" placeholder="请输入变更标题" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-gray-700">变更对象 <span class="text-red-500">*</span></label>
+                            <div class="border-2 border-dashed border-gray-200 rounded-xl p-12 flex flex-col items-center justify-center gap-4 bg-gray-50/50 hover:bg-gray-50 hover:border-primary/30 transition-all cursor-pointer">
+                                <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center text-primary">
+                                    <i data-lucide="database" class="w-6 h-6"></i>
+                                </div>
+                                <div class="text-center">
+                                    <p class="font-bold text-gray-700">点击选择或拖拽主机列表文件</p>
+                                    <p class="text-xs text-gray-400 mt-1">支持 CMDB 服务树选择、标签筛选或直接输入 IP</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-gray-700">变更时间 <span class="text-red-500">*</span></label>
+                                <div class="relative">
+                                    <i data-lucide="calendar" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    <input type="text" id="fd-time" value="${formData.time}" placeholder="开始时间 - 结束时间" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-gray-700">变更场景标识 <span class="text-red-500">*</span></label>
+                                <select id="fd-scene" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none bg-white">
+                                    <option ${formData.scene === '日常变更 (Daily Change)' ? 'selected' : ''}>日常变更 (Daily Change)</option>
+                                    <option ${formData.scene === '紧急变更 (Emergency Change)' ? 'selected' : ''}>紧急变更 (Emergency Change)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (step === 2) {
+                const templates = [
+                    { 
+                        id: 1, 
+                        tag: 'Version Upgrade', 
+                        title: 'Upgrade RDMA Agent', 
+                        desc: 'Standard procedure for H800 clusters', 
+                        rate: '99.2%', 
+                        level: 'P2', 
+                        strategy: '4 Batches (1%, 10%, 50%, 100%)',
+                        versions: ['v2.4.12 (Latest)', 'v2.4.11', 'v2.3.0 (Stable)']
+                    },
+                    { 
+                        id: 2, 
+                        tag: 'Config Change', 
+                        title: 'Modify CC Algorithm Config', 
+                        desc: 'Adjusts congestion control parameters. Requires strictly gray-scale.', 
+                        rate: '98.5%', 
+                        level: 'P1', 
+                        strategy: '5 Batches (1%, 5%, 20%, 50%, 100%)',
+                        versions: ['CC-Algo-v3.1 (High Perf)', 'CC-Algo-v3.0', 'CC-Algo-v2.5 (Legacy)']
+                    },
+                    { 
+                        id: 3, 
+                        tag: 'Network Ops', 
+                        title: 'Switch Port Isolation', 
+                        desc: 'Isolates specific ports for maintenance', 
+                        rate: '100%', 
+                        level: 'P3', 
+                        strategy: '2 Batches (10%, 100%)',
+                        versions: ['Default Action', 'Force Isolation']
+                    }
+                ];
+                
+                stepContent.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4">
+                        ${templates.map(t => `
+                            <div class="template-card border-2 ${formData.template?.id === t.id ? 'border-primary bg-primary/5 shadow-md' : 'border-gray-100 hover:border-gray-200'} p-6 rounded-xl cursor-pointer transition-all group relative" data-id="${t.id}">
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="px-2 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] font-bold uppercase">${t.tag}</span>
+                                    <div class="w-5 h-5 rounded-full border-2 ${formData.template?.id === t.id ? 'border-primary bg-primary flex items-center justify-center' : 'border-gray-200'}">
+                                        ${formData.template?.id === t.id ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}
+                                    </div>
+                                </div>
+                                <h3 class="font-bold text-gray-800 mb-2">${t.title}</h3>
+                                <p class="text-xs text-gray-400 mb-6 line-clamp-2">${t.desc}</p>
+                                
+                                <div class="mb-4">
+                                    <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 block">Target Version</label>
+                                    <select class="version-select w-full px-2 py-1.5 bg-white border border-gray-200 rounded text-xs focus:ring-1 focus:ring-primary outline-none text-gray-700" data-id="${t.id}">
+                                        ${t.versions.map(v => `<option value="${v}" ${formData.template?.id === t.id && formData.version === v ? 'selected' : ''}>${v}</option>`).join('')}
+                                    </select>
+                                </div>
+
+                                <div class="flex items-center gap-4 border-t border-gray-100 pt-4">
+                                    <div class="flex items-center gap-1 text-green-600 font-bold text-xs">
+                                        <i data-lucide="trending-up" class="w-3 h-3"></i>
+                                        <span>${t.rate}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1 text-gray-400 font-medium text-xs">
+                                        <i data-lucide="alert-circle" class="w-3 h-3"></i>
+                                        <span>${t.level}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                // Card click handler
+                document.querySelectorAll('.template-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        // Prevent triggering if clicked on select
+                        if (e.target.closest('.version-select')) return;
+
+                        const id = parseInt(card.dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        formData.template = template;
+                        formData.strategy = template.strategy;
+                        
+                        // Set default version if not already set for this template
+                        const select = card.querySelector('.version-select');
+                        formData.version = select.value;
+                        
+                        renderStep(2);
+                    });
+                });
+
+                // Version select handler
+                document.querySelectorAll('.version-select').forEach(select => {
+                    select.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Stop bubbling to card
+                    });
+                    
+                    select.addEventListener('change', (e) => {
+                        const id = parseInt(select.dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        
+                        // Update form data
+                        formData.template = template;
+                        formData.strategy = template.strategy;
+                        formData.version = e.target.value;
+                        
+                        // Re-render to show selection state
+                        renderStep(2);
+                    });
+                });
+            } else if (step === 3) {
+                // Parse batches from strategy string
+                const batches = formData.strategy.match(/\d+%/g) || ['1%', '10%', '50%', '100%'];
+                const completedBatches = 1; // Mocking first batch as "current/started"
+                const progressWidth = ((completedBatches) / (batches.length - 1)) * 100;
+
+                stepContent.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                            <h3 class="text-sm font-bold text-gray-700 mb-6 flex items-center gap-2">
+                                <i data-lucide="layers" class="w-4 h-4 text-primary"></i>
+                                分批灰度策略 (Batch Gray-scale Strategy)
+                            </h3>
+                            <div class="text-xs text-gray-500 mb-4 italic">当前模板默认策略: ${formData.strategy}</div>
+                            <div class="relative py-8">
+                                <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2 rounded-full"></div>
+                                <div class="absolute top-1/2 left-0 h-1 bg-primary -translate-y-1/2 rounded-full transition-all duration-500" style="width: ${progressWidth}%"></div>
+                                <div class="flex justify-between relative z-10">
+                                    ${batches.map((b, i) => `
+                                        <div class="w-6 h-6 rounded-full ${i <= completedBatches ? 'bg-primary ring-8 ring-blue-100' : 'bg-white border-2 border-gray-200'} flex items-center justify-center text-[10px] ${i <= completedBatches ? 'text-white' : 'text-gray-400'} font-bold transition-all duration-300">${i + 1}</div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-${batches.length} gap-4 mt-4">
+                                ${batches.map((b, i) => `
+                                    <div class="text-center">
+                                        <p class="text-[10px] font-bold ${i <= completedBatches ? 'text-primary' : 'text-gray-400'} uppercase mb-1">Batch ${i + 1}</p>
+                                        <p class="text-lg font-black text-gray-800">${b}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+                                <h4 class="text-xs font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                    <i data-lucide="eye" class="w-4 h-4 text-blue-500"></i>
+                                    观测期配置
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-500">第一批次观测</span>
+                                        <span class="font-bold text-gray-800 px-3 py-1 bg-blue-50 rounded-lg">30 mins</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-500">后续批次观测</span>
+                                        <span class="font-bold text-gray-800 px-3 py-1 bg-blue-50 rounded-lg">15 mins</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+                                <h4 class="text-xs font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                    <i data-lucide="shield-alert" class="w-4 h-4 text-red-500"></i>
+                                    风控熔断规则
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-500">错误率阈值</span>
+                                        <span class="text-red-600 font-bold px-3 py-1 bg-red-50 rounded-lg">> 0.5%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-500">核心指标监控</span>
+                                        <span class="text-green-600 font-bold px-3 py-1 bg-green-50 rounded-lg">已启用</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (step === 4) {
+                stepContent.innerHTML = `
+                    <div class="space-y-8">
+                        <div class="flex items-center gap-6 p-6 bg-blue-50 border border-blue-100 rounded-2xl">
+                            <div class="w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center text-primary">
+                                <i data-lucide="clipboard-check" class="w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-blue-900">变更预览与提交</h3>
+                                <p class="text-sm text-blue-700/70">请仔细确认以下信息，提交后将无法撤回</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-8 px-4">
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">变更标题</label>
+                                <p class="text-base font-bold text-gray-800">${formData.title}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">变更场景</label>
+                                <p class="text-base font-bold text-gray-800">${formData.scene}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">变更模板</label>
+                                <div class="flex items-center gap-3">
+                                    <span class="px-2 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] font-bold uppercase">${formData.template?.tag}</span>
+                                    <p class="text-base font-bold text-gray-800">${formData.template?.title}</p>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">灰度策略</label>
+                                <p class="text-base font-bold text-gray-800">${formData.strategy}</p>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-8 px-4">
+                            <div class="bg-gray-50 rounded-xl p-6 flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400">
+                                        <i data-lucide="user" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-800">Admin</p>
+                                        <p class="text-xs text-gray-400 font-medium">变更发起人 (Requester)</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">预计执行耗时</p>
+                                    <p class="text-sm font-bold text-primary">~ 1h 30m</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+            updateButtons();
+        };
+
+        const updateStepIndicator = () => {
+            stepNavs.forEach(nav => {
+                const step = parseInt(nav.dataset.step);
+                const circle = nav.querySelector('div');
+                const label = nav.querySelector('span');
+                
+                if (step === currentStep) {
+                    nav.classList.remove('opacity-50');
+                    circle.className = 'w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-primary/30';
+                    circle.innerHTML = step;
+                    label.className = 'text-sm font-bold text-primary';
+                } else if (step < currentStep) {
+                    nav.classList.remove('opacity-50');
+                    circle.className = 'w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-sm';
+                    circle.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>';
+                    label.className = 'text-sm font-bold text-green-500';
+                } else {
+                    nav.classList.add('opacity-50');
+                    circle.className = 'w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm';
+                    circle.innerHTML = step;
+                    label.className = 'text-sm font-bold text-gray-400';
+                }
+            });
+            lucide.createIcons();
+        };
+
+        const updateButtons = () => {
+            if (currentStep === 1) {
+                prevStepBtn.classList.add('hidden');
+                cancelDrawerBtn.classList.remove('hidden');
+                nextStepBtn.innerHTML = '<span>下一步</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+            } else if (currentStep === 4) {
+                prevStepBtn.classList.remove('hidden');
+                cancelDrawerBtn.classList.add('hidden');
+                nextStepBtn.innerHTML = '<span>提交变更申请</span> <i data-lucide="send" class="w-4 h-4"></i>';
+            } else {
+                prevStepBtn.classList.remove('hidden');
+                cancelDrawerBtn.classList.add('hidden');
+                nextStepBtn.innerHTML = '<span>下一步</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+            }
+            lucide.createIcons();
+        };
+
+        // --- Event Listeners ---
+        document.getElementById('open-drawer').addEventListener('click', () => toggleDrawer(true));
+        document.getElementById('close-drawer').addEventListener('click', () => toggleDrawer(false));
+        cancelDrawerBtn.addEventListener('click', () => toggleDrawer(false));
+        drawerOverlay.addEventListener('click', () => toggleDrawer(false));
+
+        nextStepBtn.addEventListener('click', () => {
+            if (currentStep === 1) {
+                formData.title = document.getElementById('fd-title').value;
+                formData.time = document.getElementById('fd-time').value;
+                formData.scene = document.getElementById('fd-scene').value;
+                
+                if (!formData.title) {
+                    showToast('error', '请填写变更标题');
+                    return;
+                }
+                renderStep(2);
+            } else if (currentStep === 2) {
+                if (!formData.template) {
+                    showToast('error', '请选择一个变更模板');
+                    return;
+                }
+                renderStep(3);
+            } else if (currentStep === 3) {
+                renderStep(4);
+            } else if (currentStep === 4) {
+                // Submit logic
+                const newItem = {
+                    id: `CHG-${new Date().getTime()}`,
+                    title: formData.title,
+                    time: new Date().toLocaleString(),
+                    level: formData.template.level,
+                    status: '执行中',
+                    oa: 'OA-' + Math.floor(Math.random()*1000000),
+                    template: formData.template.title,
+                    user: 'Admin',
+                    progress: 0,
+                    count: '0/200'
+                };
+                changeData.unshift(newItem);
+                renderTable(changeData);
+                toggleDrawer(false);
+                showToast('success', '变更申请提交成功');
+            }
+        });
+
+        prevStepBtn.addEventListener('click', () => {
+            if (currentStep > 1) renderStep(currentStep - 1);
+        });
+
+        // Search & Reset
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const title = document.getElementById('search-title').value.toLowerCase();
+            const level = document.getElementById('search-level').value;
+            const status = document.getElementById('search-status').value;
+            
+            const filtered = changeData.filter(item => {
+                return (!title || item.title.toLowerCase().includes(title)) &&
+                       (!level || item.level === level) &&
+                       (!status || item.status === status);
+            });
+            renderTable(filtered);
+            showToast('success', `找到 ${filtered.length} 条符合条件的变更`);
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            document.getElementById('search-title').value = '';
+            document.getElementById('search-level').value = '';
+            document.getElementById('search-status').value = '';
+            renderTable(changeData);
+        });
+
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const toggleSidebarBtn = document.getElementById('toggle-sidebar');
+        const toggleIcon = document.getElementById('toggle-icon');
+        const navTexts = document.querySelectorAll('.nav-text');
+        const logoText = document.getElementById('logo-text');
+        let sidebarCollapsed = false;
+
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebarCollapsed = !sidebarCollapsed;
+            if (sidebarCollapsed) {
+                sidebar.style.width = '80px';
+                navTexts.forEach(t => t.style.display = 'none');
+                logoText.style.display = 'none';
+                toggleIcon.style.transform = 'rotate(180deg)';
+            } else {
+                sidebar.style.width = '16rem';
+                navTexts.forEach(t => t.style.display = 'block');
+                logoText.style.display = 'block';
+                toggleIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Initial Render
+        renderTable(changeData);
+    </script>
+</body>
+</html>
