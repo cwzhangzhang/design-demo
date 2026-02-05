@@ -86,127 +86,205 @@
             <!-- Content Area -->
             <div class="flex-1 overflow-y-auto p-8 space-y-6">
                 <!-- Basic Info Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-2">
-                        <div class="text-xs text-gray-400 font-medium">变更名称</div>
-                        <div class="font-bold text-gray-800">北京机房核心交换机配置更新</div>
-                        <div class="text-xs text-gray-400">ID: CHG-20260202-992</div>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-2">
-                        <div class="text-xs text-gray-400 font-medium">变更状态 / 等级</div>
-                        <div class="flex items-center gap-2">
-                            <span class="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs font-bold">执行中</span>
-                            <span class="px-2 py-1 bg-red-50 text-red-600 rounded text-xs font-bold">P0</span>
+                <!-- Basic Info Card (Redesigned) -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-6">
+                    <div class="flex flex-col gap-6">
+                        <!-- Row 1: Title & ID & Status -->
+                        <div class="flex items-center justify-between">
+                             <div class="flex items-center gap-3">
+                                 <h2 class="font-bold text-gray-800 text-xl tracking-tight">北京机房核心交换机配置更新</h2>
+                                 <div class="flex items-center gap-1.5 text-gray-400 ml-2">
+                                    <span class="text-sm font-mono text-gray-500">CHG-20260202-992</span>
+                                    <i data-lucide="copy" class="w-3.5 h-3.5 cursor-pointer hover:text-gray-600 transition-colors"></i>
+                                 </div>
+                             </div>
+                             <div class="flex items-center gap-3">
+                                  <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold border border-blue-100 shadow-sm">执行中</span>
+                                  <span class="px-3 py-1 bg-red-50 text-red-600 rounded-full text-xs font-bold border border-red-100 shadow-sm">P0</span>
+                             </div>
                         </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-2">
-                        <div class="text-xs text-gray-400 font-medium">执行进度 (机器数量)</div>
-                        <div class="text-lg font-bold">130 <span class="text-sm font-normal text-gray-400">/ 200</span></div>
-                        <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="w-[65%] h-full bg-blue-500"></div>
+                
+                        <!-- Row 2: Applicant, Template, Host Counts -->
+                        <div class="flex items-center justify-between">
+                             <div class="flex items-center gap-8 text-sm text-gray-500">
+                                 <div class="flex items-center gap-2">
+                                     <i data-lucide="user" class="w-4 h-4 text-gray-400"></i>
+                                     <span>申请人：<span class="text-gray-900 font-medium">张三</span> <span class="text-gray-400">@zhangsan</span></span>
+                                 </div>
+                                 <div class="flex items-center gap-2">
+                                     <i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i>
+                                     <span>模板：<span class="text-gray-900 font-medium">核心交换机配置变更模板</span></span>
+                                 </div>
+                             </div>
+                             
+                             <div class="flex items-center gap-8">
+                                 <div class="flex items-center gap-2 text-gray-600">
+                                     <i data-lucide="server" class="w-4 h-4 text-gray-400"></i>
+                                     <span class="text-sm">主机 <span class="font-bold text-gray-900 text-lg ml-1">200</span></span>
+                                 </div>
+                                 <div class="flex items-center gap-2 text-green-600">
+                                     <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                     <span class="text-sm">成功 <span class="font-bold text-lg ml-1">128</span></span>
+                                 </div>
+                                 <div class="flex items-center gap-2 text-red-600">
+                                     <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                     <span class="text-sm">失败 <span class="font-bold text-lg ml-1">2</span></span>
+                                 </div>
+                             </div>
                         </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-2">
-                        <div class="text-xs text-gray-400 font-medium">成功 / 失败</div>
-                        <div class="flex items-center gap-4">
-                            <div class="text-green-600 font-bold">128 <span class="text-[10px] font-normal text-gray-400 block">SUCCESS</span></div>
-                            <div class="text-red-600 font-bold">2 <span class="text-[10px] font-normal text-gray-400 block">FAILED</span></div>
+                
+                        <!-- Row 3: Times -->
+                        <div class="flex items-center gap-8 text-xs text-gray-400">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                                <span>创建：<span class="font-mono text-gray-600">2026-02-02 10:00</span></span>
+                            </div>
+                             <div class="flex items-center gap-2">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                                <span>更新：<span class="font-mono text-gray-600">2026-02-02 14:30</span></span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // Re-initialize icons just in case
+                        if (window.lucide) {
+                            lucide.createIcons();
+                        }
+                    });
+                </script>
+
                 <!-- Execution Progress -->
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <h3 class="font-bold text-gray-800">总任务执行进度</h3>
-                            <div class="flex items-center gap-2 ml-4">
-                                <button id="btn-error" class="px-3 py-1.5 border border-red-200 text-red-600 rounded-md text-xs font-medium hover:bg-red-50 transition-colors">观测结果异常</button>
-                                <button id="btn-success" class="px-3 py-1.5 bg-green-600 text-white rounded-md text-xs font-medium hover:bg-green-700 transition-colors">观测确认成功</button>
-                            </div>
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-6">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-gray-800 text-lg">执行进度</h3>
+                            <p class="text-sm text-gray-500">当前处于灰度阶段 II，已完成 30% 的发布</p>
                         </div>
-                        <button id="open-monitor" class="flex items-center gap-2 px-3 py-1.5 bg-secondary text-primary rounded-md text-xs font-medium hover:bg-blue-100 transition-colors">
-                            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
-                            变更观测监控
+                        <span id="task-global-status" class="px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-xs font-bold border border-yellow-100 hidden">待开始</span>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="flex items-start gap-3 text-sm text-blue-700 bg-blue-50 p-4 rounded-lg mb-6 border border-blue-100">
+                        <i data-lucide="info" class="w-5 h-5 shrink-0 mt-0.5 text-blue-500"></i>
+                        <p class="font-medium">变更开始按钮仅在审批通过且处于变更时间窗口内时可点击。</p>
+                    </div>
+                    
+                    <!-- Controls -->
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg border border-gray-100">
+                            <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
+                            <span class="font-medium">变更窗口：<span class="font-mono text-gray-900" id="window-time-display">2026-02-04 14:00 - 18:00</span></span>
+                        </div>
+                        <button id="btn-start-change" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 hover:bg-gray-50 transition-all cursor-not-allowed opacity-60" disabled>
+                            <i data-lucide="play" class="w-4 h-4"></i> 开始变更
+                        </button>
+                        <button id="btn-sim-time" class="px-4 py-2 bg-white border border-yellow-200 text-yellow-700 rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 hover:bg-yellow-50 transition-all">
+                            <i data-lucide="clock" class="w-4 h-4"></i> 模拟时间到达
                         </button>
                     </div>
-                    <div class="p-8">
-                        <!-- Step Bar -->
-                        <div class="flex items-center justify-between mb-12 relative" id="step-container">
-                            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -translate-y-1/2 z-0"></div>
-                            <div id="step-progress-line" class="absolute top-1/2 left-0 w-2/3 h-0.5 bg-primary -translate-y-1/2 z-0 transition-all duration-500"></div>
-                            
-                            <div class="step-item relative z-10 flex flex-col items-center gap-2" data-step="1">
-                                <div class="w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center step-complete">
-                                    <i data-lucide="check" class="w-4 h-4"></i>
-                                </div>
-                                <span class="text-xs font-bold text-primary">灰度阶段 I</span>
+
+                    <!-- Step Progress Bar (Redesigned) -->
+                    <div class="grid grid-cols-4 border border-gray-200 rounded-xl overflow-hidden divide-x divide-gray-200 mb-6" id="step-container">
+                        <!-- Dynamic Steps -->
+                    </div>
+
+                    <!-- Phase Control Panel (Redesigned) -->
+                    <div id="phase-control-panel" class="bg-white rounded-xl border border-gray-200 p-4 mb-8 shadow-sm flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <!-- Icon Container -->
+                            <div id="panel-icon-container" class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 transition-colors">
+                                <i data-lucide="activity" class="w-6 h-6"></i>
                             </div>
-                            <div class="step-item relative z-10 flex flex-col items-center gap-2" data-step="2">
-                                <div class="w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center step-complete">
-                                    <i data-lucide="check" class="w-4 h-4"></i>
+                            <!-- Info -->
+                            <div>
+                                <div class="flex items-center gap-2 mb-0.5">
+                                    <h4 class="font-bold text-gray-900 text-sm" id="panel-title">灰度阶段 II</h4>
+                                    <span class="text-gray-400 text-xs">&gt;</span>
+                                    <span class="text-sm font-medium text-gray-500" id="panel-status-text">正在执行</span>
                                 </div>
-                                <span class="text-xs font-bold text-primary">灰度阶段 II</span>
-                            </div>
-                            <div class="step-item relative z-10 flex flex-col items-center gap-2" data-step="3">
-                                <div class="w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center step-active">
-                                    <div class="w-2 h-2 bg-primary rounded-full animate-ping"></div>
+                                <div class="flex items-center gap-3 text-xs text-gray-500">
+                                    <span class="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100">
+                                        <i data-lucide="check-circle-2" class="w-3 h-3"></i>
+                                        <span id="panel-success-count">40 正常</span>
+                                    </span>
+                                    <span class="flex items-center gap-1 text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100">
+                                        <i data-lucide="alert-triangle" class="w-3 h-3"></i>
+                                        <span id="panel-alert-count">2 告警</span>
+                                    </span>
                                 </div>
-                                <span class="text-xs font-bold text-primary">灰度阶段 III</span>
-                            </div>
-                            <div class="step-item relative z-10 flex flex-col items-center gap-2" data-step="4">
-                                <div class="w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center border-gray-200 text-gray-300">
-                                    <span class="text-xs">4</span>
-                                </div>
-                                <span class="text-xs font-bold text-gray-400">全量发布</span>
                             </div>
                         </div>
-
-                        <!-- Progress Detail Table -->
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-50 border-y border-gray-100">
-                                <tr>
-                                    <th class="px-4 py-3 font-semibold text-gray-600">阶段名称</th>
-                                    <th class="px-4 py-3 font-semibold text-gray-600">阶段状态</th>
-                                    <th class="px-4 py-3 font-semibold text-gray-600">机器灰度比例</th>
-                                    <th class="px-4 py-3 font-semibold text-gray-600">机器数量</th>
-                                    <th class="px-4 py-3 font-semibold text-gray-600">变更观测</th>
-                                </tr>
-                            </thead>
-                            <tbody id="phase-detail-body" class="divide-y divide-gray-50">
-                                <!-- Dynamic Content -->
-                            </tbody>
-                        </table>
+                        
+                        <!-- Right -->
+                        <div class="flex items-center gap-3">
+                            <button id="btn-view-monitor" class="px-3 py-1.5 bg-white border border-blue-200 text-blue-600 rounded-lg text-xs font-medium hover:bg-blue-50 transition-colors flex items-center gap-1">
+                                <i data-lucide="activity" class="w-3.5 h-3.5"></i> 变更观测监控
+                            </button>
+                            <div id="panel-actions" class="flex items-center gap-2 hidden">
+                                <button id="btn-error" class="px-3 py-1.5 border border-red-200 text-red-600 rounded-md text-xs font-medium hover:bg-red-50 transition-colors flex items-center gap-1">
+                                    <i data-lucide="x-circle" class="w-3 h-3"></i> 观测结果异常
+                                </button>
+                                <button id="btn-success" class="px-3 py-1.5 bg-green-600 text-white rounded-md text-xs font-medium hover:bg-green-700 transition-colors shadow-sm flex items-center gap-1">
+                                    <i data-lucide="check" class="w-3 h-3"></i> 观测确认成功
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Execution Report -->
                 <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-                        <h3 id="report-title" class="font-bold text-gray-800">执行报告 - 灰度阶段 III</h3>
-                        <div class="flex gap-2">
+                    <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <h3 class="font-bold text-gray-800">执行报告</h3>
+                            <!-- Scope Switcher -->
+                            <div class="bg-gray-100 p-1 rounded-lg flex items-center text-xs font-medium">
+                                <button id="scope-current" class="px-3 py-1 bg-white shadow-sm rounded-md text-gray-800 transition-all">当前阶段</button>
+                                <button id="scope-overall" class="px-3 py-1 text-gray-500 hover:text-gray-700 transition-all">任务整体</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <!-- Export Button -->
+                            <button id="btn-export" class="px-3 py-1.5 border border-gray-200 rounded-md text-xs flex items-center gap-1 hover:bg-gray-50 text-gray-600">
+                                <i data-lucide="download" class="w-3 h-3"></i> 导出 IP 列表
+                            </button>
+                            <div class="h-4 w-px bg-gray-200 mx-1"></div>
                             <div class="relative">
                                 <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                <input type="text" placeholder="搜索主机 IP" class="pl-9 pr-3 py-1.5 border border-gray-200 rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-primary">
+                                <input type="text" id="search-ip" placeholder="搜索主机 IP" class="pl-9 pr-3 py-1.5 border border-gray-200 rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-primary w-48">
                             </div>
-                            <button class="px-3 py-1.5 border border-gray-200 rounded-md text-xs flex items-center gap-1 hover:bg-gray-50">
+                            <button class="px-3 py-1.5 border border-gray-200 rounded-md text-xs flex items-center gap-1 hover:bg-gray-50 text-gray-600">
                                 <i data-lucide="filter" class="w-3 h-3"></i> 筛选状态
                             </button>
                         </div>
                     </div>
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-gray-50 border-b border-gray-100">
-                            <tr>
-                                <th class="px-6 py-4 font-semibold text-gray-600">主机 IP</th>
-                                <th class="px-6 py-4 font-semibold text-gray-600">状态</th>
-                                <th class="px-6 py-4 font-semibold text-gray-600">汇报时间</th>
-                                <th class="px-6 py-4 font-semibold text-gray-600">日志详情</th>
-                            </tr>
-                        </thead>
-                        <tbody id="execution-report-body" class="divide-y divide-gray-100">
-                            <!-- Dynamic Content -->
-                        </tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-gray-50 border-b border-gray-100">
+                                <tr>
+                                    <th class="px-6 py-4 font-semibold text-gray-600">主机 IP</th>
+                                    <th class="px-6 py-4 font-semibold text-gray-600">状态</th>
+                                    <th class="px-6 py-4 font-semibold text-gray-600">Stdout</th>
+                                    <th class="px-6 py-4 font-semibold text-gray-600">Stderr</th>
+                                    <th class="px-6 py-4 font-semibold text-gray-600">汇报时间</th>
+                                </tr>
+                            </thead>
+                            <tbody id="execution-report-body" class="divide-y divide-gray-100">
+                                <!-- Dynamic Content -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                        <span class="text-xs text-gray-500" id="pagination-info">显示 1-10 共 0 条</span>
+                        <div class="flex items-center gap-2" id="pagination-controls">
+                            <!-- Pagination Buttons -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -218,7 +296,28 @@
         <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0 z-10">
             <div>
                 <h2 class="text-lg font-bold">变更观测监控</h2>
-                <p class="text-xs text-gray-400">当前阶段：灰度阶段 III</p>
+                <div class="flex items-center gap-4 mt-2">
+                    <div class="flex items-center gap-2 bg-gray-100 p-0.5 rounded-lg inline-flex">
+                        <button id="monitor-scope-current" class="px-2 py-1 text-xs bg-white text-gray-800 font-bold rounded shadow-sm transition-all">当前阶段</button>
+                        <button id="monitor-scope-overall" class="px-2 py-1 text-xs text-gray-500 hover:text-gray-700 transition-all font-medium">任务整体</button>
+                    </div>
+                    <div class="h-6 w-px bg-gray-200"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-500">时间范围:</span>
+                        <select id="monitor-time-range" class="text-xs border border-gray-200 rounded px-2 py-1 bg-white focus:outline-none focus:border-primary text-gray-700">
+                            <option value="10m">最近 10 分钟</option>
+                            <option value="30m">最近 30 分钟</option>
+                            <option value="1h">最近 1 小时</option>
+                            <option value="custom">自定义时间</option>
+                        </select>
+                        <!-- Custom Time Inputs -->
+                        <div id="custom-time-inputs" class="hidden flex items-center gap-2 animate-fade-in">
+                            <input type="datetime-local" id="custom-start-time" class="text-xs border border-gray-200 rounded px-2 py-1 bg-white focus:outline-none focus:border-primary text-gray-700 w-32">
+                            <span class="text-gray-400">-</span>
+                            <input type="datetime-local" id="custom-end-time" class="text-xs border border-gray-200 rounded px-2 py-1 bg-white focus:outline-none focus:border-primary text-gray-700 w-32">
+                        </div>
+                    </div>
+                </div>
             </div>
             <button id="close-monitor" class="p-2 hover:bg-gray-100 rounded-full text-gray-400">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -226,6 +325,32 @@
         </div>
         
         <div class="flex-1 overflow-y-auto p-8 space-y-8 bg-gray-50/30">
+            <!-- Alerts Section -->
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <h4 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                        <i data-lucide="bell" class="w-4 h-4 text-orange-500"></i>
+                        阶段告警信息
+                    </h4>
+                    <span class="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full font-medium" id="drawer-alert-count">2</span>
+                </div>
+                <div class="max-h-48 overflow-y-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-gray-50 text-gray-500">
+                            <tr>
+                                <th class="px-4 py-2 font-medium">时间</th>
+                                <th class="px-4 py-2 font-medium">主机</th>
+                                <th class="px-4 py-2 font-medium">告警内容</th>
+                                <th class="px-4 py-2 font-medium">等级</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drawer-alerts-body" class="divide-y divide-gray-50">
+                            <!-- Dynamic Alerts -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Metrics Grid -->
             <div class="grid grid-cols-2 gap-6">
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
@@ -287,50 +412,89 @@
         };
 
         // Progress Interaction Logic
-        let currentStep = 3;
-        let selectedStep = 3;
+        let currentStep = 1;
+        let selectedStep = 1;
         const totalSteps = 4;
         
+        // Task State
+        let taskGlobalStatus = 'PENDING'; // 'PENDING', 'RUNNING', 'SUCCESS', 'TERMINATED'
+        let isChangeWindowOpen = false;
+        
+        // Report State
+        let currentScope = 'current'; // 'current' or 'overall'
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        // Generate more mock data
+        const generateReports = (count, startIp, statusOverride) => {
+            return Array.from({ length: count }, (_, i) => {
+                const status = statusOverride || (Math.random() > 0.1 ? 'SUCCESS' : 'FAILED');
+                return {
+                    ip: `10.128.${startIp}.${i + 1}`,
+                    status: status,
+                    stdout: status === 'SUCCESS' ? 'Config updated successfully.\nService restarted.' : 'Error: Connection timeout.',
+                    stderr: status === 'SUCCESS' ? '' : 'TimeoutException: 5000ms',
+                    time: status === 'PENDING' ? '-' : `2026-02-04 ${14 + startIp}:${String(i % 60).padStart(2, '0')}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`
+                };
+            });
+        };
+
+        const generateAlerts = (count, startIp) => {
+             return Array.from({ length: count }, (_, i) => {
+                return {
+                    time: `2026-02-04 ${14 + startIp}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
+                    host: `10.128.${startIp}.${Math.floor(Math.random() * 255)}`,
+                    message: ['CPU load > 90%', 'Disk usage > 85%', 'Network latency high'][Math.floor(Math.random() * 3)],
+                    severity: ['Critical', 'Warning'][Math.floor(Math.random() * 2)]
+                };
+            });
+        };
+        
+        // Initial Phase Mock Data (All Pending)
         const phaseMockData = {
             1: {
                 name: '灰度阶段 I',
-                status: '已成功',
+                status: '待执行',
                 ratio: '10%',
                 count: 20,
-                reports: [
-                    { ip: '10.128.0.1', status: 'SUCCESS', time: '2026-02-02 10:05:12' },
-                    { ip: '10.128.0.2', status: 'SUCCESS', time: '2026-02-02 10:06:45' },
-                    { ip: '10.128.0.3', status: 'SUCCESS', time: '2026-02-02 10:07:22' }
-                ]
+                reports: [],
+                alerts: [],
+                obsDuration: 10, // seconds for demo
+                obsRemaining: 10,
+                subStatus: 'pending' // pending, executing, observing, done
             },
             2: {
                 name: '灰度阶段 II',
-                status: '已成功',
-                ratio: '20%',
-                count: 40,
-                reports: [
-                    { ip: '10.128.1.15', status: 'SUCCESS', time: '2026-02-02 10:45:00' },
-                    { ip: '10.128.1.18', status: 'SUCCESS', time: '2026-02-02 10:46:30' },
-                    { ip: '10.128.1.22', status: 'SUCCESS', time: '2026-02-02 10:48:12' }
-                ]
+                status: '待执行',
+                ratio: '30%',
+                count: 60,
+                reports: [],
+                alerts: [],
+                obsDuration: 30,
+                obsRemaining: 30,
+                subStatus: 'pending'
             },
             3: {
                 name: '灰度阶段 III',
-                status: '执行中',
-                ratio: '30%',
-                count: 60,
-                reports: [
-                    { ip: '10.128.0.42', status: 'SUCCESS', time: '2026-02-02 11:24:05' },
-                    { ip: '10.128.0.45', status: 'FAILED', time: '2026-02-02 11:25:12' },
-                    { ip: '10.128.0.48', status: 'PENDING', time: '-' }
-                ]
+                status: '待执行',
+                ratio: '60%',
+                count: 100,
+                reports: [],
+                alerts: [],
+                obsDuration: 60,
+                obsRemaining: 60,
+                subStatus: 'pending'
             },
             4: {
                 name: '全量发布',
                 status: '待执行',
                 ratio: '100%',
-                count: 200,
-                reports: []
+                count: 20,
+                reports: [],
+                alerts: [],
+                obsDuration: 10,
+                obsRemaining: 10,
+                subStatus: 'pending'
             }
         };
 
@@ -340,13 +504,55 @@
         const stepItems = document.querySelectorAll('.step-item');
         const phaseDetailBody = document.getElementById('phase-detail-body');
         const reportBody = document.getElementById('execution-report-body');
-        const reportTitle = document.getElementById('report-title');
+        
+        // Phase Control Panel Elements
+        const phaseControlPanel = document.getElementById('phase-control-panel');
+        const panelTitle = document.getElementById('panel-title');
+        const panelSuccessCount = document.getElementById('panel-success-count');
+        const panelAlertCount = document.getElementById('panel-alert-count');
+        const panelActions = document.getElementById('panel-actions');
+        const btnViewMonitor = document.getElementById('btn-view-monitor');
+        
+        // Drawer Elements
+        const drawerAlertsBody = document.getElementById('drawer-alerts-body');
+        const drawerAlertCount = document.getElementById('drawer-alert-count');
+        
+        // New Controls
+        const scopeCurrentBtn = document.getElementById('scope-current');
+        const scopeOverallBtn = document.getElementById('scope-overall');
+        const btnExport = document.getElementById('btn-export');
+        const searchInput = document.getElementById('search-ip');
+        const paginationInfo = document.getElementById('pagination-info');
+        const paginationControls = document.getElementById('pagination-controls');
+
+        // Task Controls
+        const btnStartChange = document.getElementById('btn-start-change');
+        const btnSimTime = document.getElementById('btn-sim-time');
+        const taskGlobalStatusLabel = document.getElementById('task-global-status');
 
         const renderPhaseDetail = (step) => {
             const data = phaseMockData[step];
-            const statusColor = data.status === '已成功' ? 'green' : (data.status === '执行中' ? 'blue' : 'gray');
-            const icon = data.status === '已成功' ? 'check-circle-2' : (data.status === '执行中' ? 'loader-2' : 'circle');
+            const statusColor = data.status === '已成功' ? 'green' : (data.status === '执行中' ? 'blue' : (data.status === '异常中止' ? 'red' : 'gray'));
+            const icon = data.status === '已成功' ? 'check-circle-2' : (data.status === '执行中' ? 'loader-2' : (data.status === '异常中止' ? 'x-circle' : 'circle'));
             const spin = data.status === '执行中' ? 'animate-spin' : '';
+
+            // Observation Text Logic
+            let obsText = '-';
+            if (data.status === '待执行') {
+                obsText = `${data.obsDuration}s`;
+            } else if (data.status === '执行中') {
+                if (data.subStatus === 'executing') {
+                    obsText = '变更执行中...';
+                } else if (data.subStatus === 'observing') {
+                    obsText = `<span class="text-orange-600 font-bold flex items-center gap-1"><i data-lucide="timer" class="w-3 h-3 animate-pulse"></i> 观测剩余: ${data.obsRemaining}s</span>`;
+                } else if (data.subStatus === 'done') {
+                    obsText = `<span class="text-green-600 font-bold">观测完成</span>`;
+                }
+            } else if (data.status === '已成功') {
+                 obsText = `<span class="text-green-600">观测结束</span>`;
+            } else {
+                 obsText = '异常中止';
+            }
 
             phaseDetailBody.innerHTML = `
                 <tr>
@@ -359,123 +565,468 @@
                     </td>
                     <td class="px-4 py-4">${data.ratio}</td>
                     <td class="px-4 py-4">${data.count}</td>
-                    <td class="px-4 py-4 text-primary cursor-pointer hover:underline">
-                        ${data.status === '待执行' ? '-' : (data.status === '执行中' ? '观测中...' : '查看指标')}
+                    <td class="px-4 py-4 text-xs font-mono">
+                        ${obsText}
                     </td>
                 </tr>
             `;
             lucide.createIcons({ target: phaseDetailBody });
         };
 
-        const renderExecutionReport = (step) => {
-            const data = phaseMockData[step];
-            reportTitle.textContent = `执行报告 - ${data.name}`;
-            
-            if (data.reports.length === 0) {
-                reportBody.innerHTML = '<tr><td colspan="4" class="px-6 py-12 text-center text-gray-400">暂无执行数据</td></tr>';
-                return;
-            }
-
-            reportBody.innerHTML = data.reports.map(report => `
-                <tr>
-                    <td class="px-6 py-4 font-mono text-xs">${report.ip}</td>
-                    <td class="px-6 py-4">
-                        <span class="px-2 py-0.5 bg-${report.status === 'SUCCESS' ? 'green' : (report.status === 'FAILED' ? 'red' : 'gray')}-50 text-${report.status === 'SUCCESS' ? 'green' : (report.status === 'FAILED' ? 'red' : 'gray')}-600 rounded text-[10px] font-bold">
-                            ${report.status}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-gray-400 text-xs">${report.time}</td>
-                    <td class="px-6 py-4 text-primary hover:underline cursor-pointer text-xs">View Log</td>
-                </tr>
-            `).join('');
+        const copyToClipboard = (text) => {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('success', `已复制 IP: ${text}`);
+            }).catch(() => {
+                showToast('error', '复制失败');
+            });
         };
 
+        const renderExecutionReport = () => {
+            // 1. Gather Data based on Scope
+            let allReports = [];
+            if (currentScope === 'current') {
+                allReports = phaseMockData[selectedStep].reports || [];
+            } else {
+                // Aggregate all phases
+                Object.values(phaseMockData).forEach(phase => {
+                    if (phase.reports) {
+                        allReports = [...allReports, ...phase.reports];
+                    }
+                });
+            }
+
+            // 2. Filter (Search)
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            if (searchTerm) {
+                allReports = allReports.filter(r => r.ip.toLowerCase().includes(searchTerm));
+            }
+
+            // 3. Pagination
+            const totalItems = allReports.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+            
+            // Adjust current page if out of bounds
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const pageData = allReports.slice(startIndex, endIndex);
+
+            // 4. Render Table
+            if (pageData.length === 0) {
+                reportBody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-400">暂无数据</td></tr>';
+            } else {
+                reportBody.innerHTML = pageData.map(report => `
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-6 py-4 font-mono text-xs group relative">
+                            <span class="cursor-pointer hover:text-primary transition-colors flex items-center gap-2" onclick="copyToClipboard('${report.ip}')">
+                                ${report.ip}
+                                <i data-lucide="copy" class="w-3 h-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-0.5 bg-${report.status === 'SUCCESS' ? 'green' : (report.status === 'FAILED' ? 'red' : 'gray')}-50 text-${report.status === 'SUCCESS' ? 'green' : (report.status === 'FAILED' ? 'red' : 'gray')}-600 rounded text-[10px] font-bold">
+                                ${report.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-xs font-mono text-gray-600 max-w-[150px] truncate" title="${report.stdout}">${report.stdout || '-'}</td>
+                        <td class="px-6 py-4 text-xs font-mono text-red-400 max-w-[150px] truncate" title="${report.stderr}">${report.stderr || '-'}</td>
+                        <td class="px-6 py-4 text-gray-400 text-xs">${report.time}</td>
+                    </tr>
+                `).join('');
+            }
+            lucide.createIcons({ target: reportBody });
+
+            // 5. Update Pagination UI
+            paginationInfo.textContent = `显示 ${totalItems === 0 ? 0 : startIndex + 1}-${endIndex} 共 ${totalItems} 条`;
+            
+            paginationControls.innerHTML = `
+                <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})" class="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <span class="text-xs font-medium text-gray-600">第 ${currentPage} / ${totalPages} 页</span>
+                <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})" class="p-1 rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            `;
+            lucide.createIcons({ target: paginationControls });
+        };
+
+        // Global function for pagination click
+        window.changePage = (page) => {
+            currentPage = page;
+            renderExecutionReport();
+        };
+
+        // Event Listeners for Report Controls
+        scopeCurrentBtn.addEventListener('click', () => {
+            currentScope = 'current';
+            currentPage = 1;
+            scopeCurrentBtn.className = 'px-3 py-1 bg-white shadow-sm rounded-md text-gray-800 transition-all';
+            scopeOverallBtn.className = 'px-3 py-1 text-gray-500 hover:text-gray-700 transition-all';
+            renderExecutionReport();
+        });
+
+        scopeOverallBtn.addEventListener('click', () => {
+            currentScope = 'overall';
+            currentPage = 1;
+            scopeOverallBtn.className = 'px-3 py-1 bg-white shadow-sm rounded-md text-gray-800 transition-all';
+            scopeCurrentBtn.className = 'px-3 py-1 text-gray-500 hover:text-gray-700 transition-all';
+            renderExecutionReport();
+        });
+
+        searchInput.addEventListener('input', () => {
+            currentPage = 1;
+            renderExecutionReport();
+        });
+
+        btnExport.addEventListener('click', () => {
+            showToast('success', '正在导出 IP 列表...');
+            setTimeout(() => {
+                showToast('success', '导出完成！已下载 ip_list.csv');
+            }, 1000);
+        });
+
         const updateProgressUI = () => {
-            stepItems.forEach((item, index) => {
-                const stepNum = index + 1;
-                const circle = item.querySelector('div');
-                const label = item.querySelector('span');
+            // Update Global Status Label
+            taskGlobalStatusLabel.classList.remove('hidden');
+            let statusText = '待开始';
+            let statusClass = 'bg-yellow-50 text-yellow-600 border-yellow-100';
+            
+            if (taskGlobalStatus === 'RUNNING') {
+                statusText = '执行中';
+                statusClass = 'bg-blue-50 text-blue-600 border-blue-100';
+            } else if (taskGlobalStatus === 'SUCCESS') {
+                statusText = '已成功';
+                statusClass = 'bg-green-50 text-green-600 border-green-100';
+            } else if (taskGlobalStatus === 'TERMINATED') {
+                statusText = '终止';
+                statusClass = 'bg-red-50 text-red-600 border-red-100';
+            }
+            taskGlobalStatusLabel.textContent = statusText;
+            taskGlobalStatusLabel.className = `px-3 py-1 rounded-full text-xs font-bold border ${statusClass}`;
+
+            // Render Steps
+            const stepContainer = document.getElementById('step-container');
+            let stepsHtml = '';
+            const totalStepsCount = Object.keys(phaseMockData).length;
+
+            Object.keys(phaseMockData).forEach((key, index) => {
+                const step = parseInt(key);
+                const data = phaseMockData[step];
+                let cardClass = '';
+                let iconHtml = '';
+                let statusBadge = '';
+                let activeBorder = '';
                 
-                // Set selection state
-                if (stepNum === selectedStep) {
-                    item.classList.add('selected');
+                // Determine State
+                let isCompleted = false;
+                let isActive = false;
+                let isFailed = false;
+
+                if (taskGlobalStatus === 'PENDING') {
+                    // All pending
+                    cardClass = 'bg-white hover:bg-gray-50';
+                    iconHtml = `<div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs font-bold transition-colors">${step}</div>`;
+                    statusBadge = `<span class="px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded-full font-bold">待执行</span>`;
+                } else if (taskGlobalStatus === 'TERMINATED') {
+                    if (step < currentStep) {
+                        isCompleted = true;
+                    } else if (step === currentStep) {
+                        isFailed = true;
+                    } else {
+                        cardClass = 'bg-white opacity-40';
+                        iconHtml = `<div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs font-bold transition-colors">${step}</div>`;
+                        statusBadge = `<span class="px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded-full font-bold">待执行</span>`;
+                    }
                 } else {
-                    item.classList.remove('selected');
+                    // Running or Success
+                    if (step < currentStep || (taskGlobalStatus === 'SUCCESS' && step === currentStep)) {
+                        isCompleted = true;
+                    } else if (step === currentStep) {
+                        isActive = true;
+                    } else {
+                        cardClass = 'bg-white opacity-60';
+                        iconHtml = `<div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs font-bold transition-colors">${step}</div>`;
+                        statusBadge = `<span class="px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded-full font-bold">待执行</span>`;
+                    }
                 }
 
-                if (stepNum < currentStep) {
-                    // Completed
-                    circle.className = 'w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center step-complete';
-                    circle.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>';
-                    label.className = 'text-xs font-bold text-primary';
-                } else if (stepNum === currentStep) {
-                    // Active
-                    circle.className = 'w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center step-active';
-                    circle.innerHTML = '<div class="w-2 h-2 bg-primary rounded-full animate-ping"></div>';
-                    label.className = 'text-xs font-bold text-primary';
-                } else {
-                    // Pending
-                    circle.className = 'w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center border-gray-200 text-gray-300';
-                    circle.innerHTML = `<span class="text-xs">${stepNum}</span>`;
-                    label.className = 'text-xs font-bold text-gray-400';
+                if (isCompleted) {
+                    cardClass = 'bg-gray-50';
+                    iconHtml = `<div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white shadow-sm transition-transform scale-105"><i data-lucide="check" class="w-3.5 h-3.5"></i></div>`;
+                    statusBadge = `<span class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] rounded-full font-bold">已完成</span>`;
                 }
+
+                if (isFailed) {
+                    cardClass = 'bg-red-50';
+                    iconHtml = `<div class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-white shadow-sm"><i data-lucide="x" class="w-3.5 h-3.5"></i></div>`;
+                    statusBadge = `<span class="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] rounded-full font-bold">失败</span>`;
+                    activeBorder = `<div class="absolute bottom-0 left-0 w-full h-1 bg-red-500"></div>`;
+                }
+
+                if (isActive) {
+                    cardClass = 'bg-white relative shadow-md z-10';
+                    iconHtml = `<div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-md ring-2 ring-blue-100">${step}</div>`;
+                    statusBadge = `<span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] rounded-full font-bold border border-blue-100">执行中</span>`;
+                    activeBorder = `<div class="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></div>`;
+                }
+                
+                // Connecting Line Logic
+                let progressLine = '';
+                if (index < totalStepsCount - 1) { // Not the last step
+                    const lineClass = isCompleted ? 'bg-green-500' : 'bg-gray-200';
+                    progressLine = `<div class="h-0.5 flex-1 rounded-full ${lineClass} transition-colors duration-500"></div>`;
+                }
+
+                // Add click handler for selection
+                const isSelected = step === selectedStep;
+                const selectionClass = isSelected ? 'ring-2 ring-primary ring-inset bg-blue-50/30' : '';
+
+                // Render Details
+                stepsHtml += `
+                <div class="p-4 flex flex-col gap-3 group transition-all cursor-pointer ${cardClass} ${selectionClass} step-item relative overflow-hidden" data-step="${step}">
+                     <div class="flex items-center justify-between relative z-10 w-full">
+                         <div class="flex items-center gap-2 flex-1">
+                             ${iconHtml}
+                             ${statusBadge}
+                             ${progressLine}
+                         </div>
+                     </div>
+                     <div class="relative z-10">
+                         <h4 class="font-bold text-gray-800 text-sm group-hover:text-primary transition-colors">${data.name}</h4>
+                     </div>
+                     <div class="space-y-1.5 relative z-10">
+                         <div class="flex items-center gap-2 text-xs text-gray-500">
+                             <i data-lucide="pie-chart" class="w-3.5 h-3.5 text-gray-400"></i> 灰度 ${data.ratio}
+                         </div>
+                         <div class="flex items-center gap-2 text-xs text-gray-500">
+                             <i data-lucide="server" class="w-3.5 h-3.5 text-gray-400"></i> ${data.count} 台机器
+                         </div>
+                         <div class="flex items-center gap-2 text-xs text-gray-500">
+                             <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400"></i> 
+                             ${data.subStatus === 'observing' ? `<span class="text-blue-600 font-bold animate-pulse">观测剩余 ${data.obsRemaining}s</span>` : `观测 ${data.obsDuration}s`}
+                        </div>
+                     </div>
+                     ${activeBorder}
+                </div>
+                `;
             });
+
+            stepContainer.innerHTML = stepsHtml;
             
-            // Update Line (always based on current execution step)
-            const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            progressLine.style.width = `${progressPercent}%`;
+            // Re-attach event listeners to new step items
+            const newStepItems = stepContainer.querySelectorAll('.step-item');
+            newStepItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    selectedStep = parseInt(item.getAttribute('data-step'));
+                    if (currentScope === 'current') {
+                        currentPage = 1;
+                    }
+                    updateProgressUI();
+                });
+            });
+
+            // Update Phase Control Panel (New Logic)
+            const data = phaseMockData[selectedStep];
+            const panelTitle = document.getElementById('panel-title');
+            const panelStatusText = document.getElementById('panel-status-text');
+            const panelIconContainer = document.getElementById('panel-icon-container');
+            const panelSuccessCount = document.getElementById('panel-success-count');
+            const panelAlertCount = document.getElementById('panel-alert-count');
+            const panelActions = document.getElementById('panel-actions');
             
-            renderPhaseDetail(selectedStep);
-            renderExecutionReport(selectedStep);
+            panelTitle.textContent = data.name;
+            // Map '执行中' to '正在执行' for the panel text to match screenshot
+            panelStatusText.textContent = data.status === '执行中' ? '正在执行' : data.status;
+            
+            // Panel Status Styling
+            let statusColor = 'text-gray-500';
+            let iconBg = 'bg-gray-50';
+            let iconColor = 'text-gray-400';
+            
+            if (taskGlobalStatus === 'RUNNING' && selectedStep === currentStep && data.status === '执行中') {
+                 statusColor = 'text-gray-500'; // Screenshot shows gray text for status
+                 iconBg = 'bg-blue-50';
+                 iconColor = 'text-blue-600';
+            } else if (data.status === '已成功') {
+                 statusColor = 'text-green-600';
+                 iconBg = 'bg-green-50';
+                 iconColor = 'text-green-600';
+            } else if (data.status === '失败') {
+                 statusColor = 'text-red-600';
+                 iconBg = 'bg-red-50';
+                 iconColor = 'text-red-600';
+            }
+            
+            panelStatusText.className = `text-sm font-medium ${statusColor}`;
+            panelIconContainer.className = `w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${iconBg} ${iconColor}`;
+
+            // Update counts in panel
+            const successCount = (data.reports || []).filter(r => r.status === 'SUCCESS').length;
+            const alertCount = (data.alerts || []).length;
+            panelSuccessCount.innerHTML = `${successCount} 正常`;
+            panelAlertCount.innerHTML = `${alertCount} 告警`;
+            
+            // Control visibility of actions
+            if (taskGlobalStatus === 'RUNNING' && selectedStep === currentStep && data.status === '执行中') {
+                panelActions.classList.remove('hidden');
+                
+                // Only enable Success button if Observation is Done
+                if (data.subStatus === 'done') {
+                    btnSuccess.disabled = false;
+                    btnSuccess.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnSuccess.classList.add('animate-bounce');
+                } else {
+                    btnSuccess.disabled = true;
+                    btnSuccess.classList.add('opacity-50', 'cursor-not-allowed');
+                    btnSuccess.classList.remove('animate-bounce');
+                }
+
+                btnError.disabled = false;
+                btnError.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                panelActions.classList.add('hidden');
+            }
+
+            renderExecutionReport(); 
             lucide.createIcons();
         };
 
-        // Add Click Events to Step Items
-        stepItems.forEach(item => {
-            item.addEventListener('click', () => {
-                selectedStep = parseInt(item.getAttribute('data-step'));
-                updateProgressUI();
-            });
+        // Change Window Check
+        const checkChangeWindow = () => {
+            if (taskGlobalStatus !== 'PENDING') {
+                btnStartChange.disabled = true;
+                btnStartChange.className = 'px-3 py-1.5 bg-gray-100 text-gray-400 rounded-md text-xs font-medium cursor-not-allowed flex items-center gap-1 transition-all';
+                return;
+            }
+
+            // Simple mock time check logic
+            // In real app, compare new Date() with start/end
+            if (isChangeWindowOpen) {
+                btnStartChange.disabled = false;
+                btnStartChange.className = 'px-3 py-1.5 bg-primary text-white rounded-md text-xs font-medium hover:bg-blue-700 flex items-center gap-1 transition-all shadow-sm animate-pulse';
+            } else {
+                btnStartChange.disabled = true;
+                btnStartChange.className = 'px-3 py-1.5 bg-gray-100 text-gray-400 rounded-md text-xs font-medium cursor-not-allowed flex items-center gap-1 transition-all';
+            }
+        };
+
+        btnSimTime.addEventListener('click', () => {
+            isChangeWindowOpen = true;
+            btnSimTime.innerHTML = '<i data-lucide="check" class="w-3 h-3 inline mr-1"></i>已模拟到达';
+            btnSimTime.className = "ml-2 px-2 py-1 bg-green-50 text-green-600 border border-green-200 rounded text-[10px] cursor-default";
+            btnSimTime.disabled = true;
+            showToast('success', '已模拟当前时间进入变更窗口！');
+            checkChangeWindow();
+            lucide.createIcons();
+        });
+
+        let observationTimer = null;
+
+        const startPhaseExecution = (step) => {
+             // 1. Set Status to Executing
+             phaseMockData[step].status = '执行中';
+             phaseMockData[step].subStatus = 'executing';
+             updateProgressUI();
+
+             // 2. Simulate Execution Delay (e.g. 2 seconds)
+             setTimeout(() => {
+                 // 3. Start Observation
+                 startObservation(step);
+             }, 2000);
+        };
+
+        const startObservation = (step) => {
+            const data = phaseMockData[step];
+            data.subStatus = 'observing';
+            
+            showToast('success', `${data.name}: 变更执行完成，开始观测（时长 ${data.obsDuration}s）`);
+            updateProgressUI();
+
+            // Clear previous timer if any
+            if (observationTimer) clearInterval(observationTimer);
+
+            observationTimer = setInterval(() => {
+                if (data.obsRemaining > 0) {
+                    data.obsRemaining--;
+                    // Only update UI if we are looking at this step
+                    if (selectedStep === step) {
+                        updateProgressUI(); 
+                    }
+                } else {
+                    // Done
+                    clearInterval(observationTimer);
+                    data.subStatus = 'done';
+                    showToast('success', `${data.name}: 观测期结束，请确认结果`);
+                    updateProgressUI();
+                }
+            }, 1000);
+        };
+
+        btnStartChange.addEventListener('click', () => {
+            if (taskGlobalStatus !== 'PENDING') return;
+            
+            taskGlobalStatus = 'RUNNING';
+            currentStep = 1;
+            selectedStep = 1;
+            
+            // Start Phase 1 Logic
+            phaseMockData[1].reports = [
+                ...generateReports(15, 0, 'SUCCESS'),
+                ...generateReports(5, 0, 'PENDING')
+            ];
+            phaseMockData[1].alerts = generateAlerts(1, 0);
+            
+            startPhaseExecution(1);
+            
+            checkChangeWindow(); // Disable button
+            showToast('success', '变更任务已开始执行！');
         });
 
         btnSuccess.addEventListener('click', () => {
+            if (taskGlobalStatus !== 'RUNNING') return;
+            
+            // Complete current phase
+            phaseMockData[currentStep].status = '已成功';
+            if (observationTimer) clearInterval(observationTimer);
+            
+            // Check if there is a next phase
             if (currentStep < totalSteps) {
-                // Update Mock Data
-                phaseMockData[currentStep].status = '已成功';
-                
                 currentStep++;
-                selectedStep = currentStep; // Auto switch to next step view
+                selectedStep = currentStep;
                 
-                // Mock next step status
-                phaseMockData[currentStep].status = '执行中';
                 phaseMockData[currentStep].reports = [
-                    { ip: '10.128.5.1', status: 'SUCCESS', time: new Date().toLocaleString() },
-                    { ip: '10.128.5.2', status: 'PENDING', time: '-' }
+                    ...generateReports(5, currentStep, 'SUCCESS'),
+                    ...generateReports(2, currentStep, 'PENDING')
                 ];
-
-                updateProgressUI();
+                phaseMockData[currentStep].alerts = generateAlerts(Math.floor(Math.random() * 3), currentStep);
+                
+                startPhaseExecution(currentStep);
+                
                 showToast('success', `确认成功！已进入：${phaseMockData[currentStep].name}`);
             } else {
-                phaseMockData[currentStep].status = '已成功';
-                updateProgressUI();
+                // All phases done
+                taskGlobalStatus = 'SUCCESS';
                 showToast('success', '变更任务已全部完成！');
-                btnSuccess.disabled = true;
-                btnSuccess.classList.add('opacity-50', 'cursor-not-allowed');
+                updateProgressUI();
             }
         });
 
         btnError.addEventListener('click', () => {
-            showToast('error', '观测结果异常！已中止当前进度并通知相关人员。');
+             if (taskGlobalStatus !== 'RUNNING') return;
+             
             phaseMockData[currentStep].status = '异常中止';
-            const activeStepItem = document.querySelector(`.step-item[data-step="${currentStep}"] div`);
-            activeStepItem.classList.remove('step-active');
-            activeStepItem.classList.add('bg-red-50', 'border-red-500', 'text-red-500');
-            activeStepItem.innerHTML = '<i data-lucide="alert-circle" class="w-4 h-4"></i>';
-            lucide.createIcons();
+            taskGlobalStatus = 'TERMINATED';
+            
+            showToast('error', '观测结果异常！任务已终止。');
+            updateProgressUI();
         });
 
         // Initial Render
         updateProgressUI();
+        checkChangeWindow();
 
         // Sidebar Toggle
         const sidebar = document.getElementById('sidebar');
@@ -496,16 +1047,127 @@
         // Monitor Drawer Logic
         const drawer = document.getElementById('drawer');
         const overlay = document.getElementById('drawer-overlay');
-        const openBtn = document.getElementById('open-monitor');
         const closeBtn = document.getElementById('close-monitor');
+        const monitorScopeCurrentBtn = document.getElementById('monitor-scope-current');
+        const monitorScopeOverallBtn = document.getElementById('monitor-scope-overall');
+        const monitorTimeRange = document.getElementById('monitor-time-range');
+        const customTimeInputs = document.getElementById('custom-time-inputs');
+        const customStartTime = document.getElementById('custom-start-time');
+        const customEndTime = document.getElementById('custom-end-time');
+        
+        let monitorScope = 'current'; // 'current' or 'overall'
+        let monitorTime = '10m'; // '10m', '30m', '1h', 'custom'
+
+        const updateMonitorScopeUI = () => {
+             if (monitorScope === 'current') {
+                monitorScopeCurrentBtn.className = 'px-2 py-1 text-xs bg-white text-gray-800 font-bold rounded shadow-sm transition-all';
+                monitorScopeOverallBtn.className = 'px-2 py-1 text-xs text-gray-500 hover:text-gray-700 transition-all font-medium';
+            } else {
+                monitorScopeOverallBtn.className = 'px-2 py-1 text-xs bg-white text-gray-800 font-bold rounded shadow-sm transition-all';
+                monitorScopeCurrentBtn.className = 'px-2 py-1 text-xs text-gray-500 hover:text-gray-700 transition-all font-medium';
+            }
+            renderDrawerContent();
+        };
+
+        monitorScopeCurrentBtn.addEventListener('click', () => {
+            monitorScope = 'current';
+            updateMonitorScopeUI();
+        });
+
+        monitorScopeOverallBtn.addEventListener('click', () => {
+            monitorScope = 'overall';
+            updateMonitorScopeUI();
+        });
+
+        monitorTimeRange.addEventListener('change', (e) => {
+            monitorTime = e.target.value;
+            if (monitorTime === 'custom') {
+                customTimeInputs.classList.remove('hidden');
+                // Set default values if empty (current time window)
+                if (!customStartTime.value) {
+                    const now = new Date();
+                    const oneHourAgo = new Date(now.getTime() - 60*60*1000);
+                    // Adjust for timezone offset to show correct local time in input
+                    const toLocalISO = (date) => {
+                        const offset = date.getTimezoneOffset() * 60000;
+                        return new Date(date.getTime() - offset).toISOString().slice(0,16);
+                    };
+                    customEndTime.value = toLocalISO(now);
+                    customStartTime.value = toLocalISO(oneHourAgo);
+                }
+            } else {
+                customTimeInputs.classList.add('hidden');
+            }
+            renderDrawerContent();
+        });
+
+        [customStartTime, customEndTime].forEach(input => {
+            input.addEventListener('change', () => {
+                if (monitorTime === 'custom') renderDrawerContent();
+            });
+        });
+
+        const renderDrawerContent = () => {
+             // Render Alerts
+             let alerts = [];
+             if (monitorScope === 'current') {
+                alerts = phaseMockData[selectedStep].alerts || [];
+             } else {
+                 // Aggregate all alerts
+                 Object.values(phaseMockData).forEach(phase => {
+                    if (phase.alerts) {
+                        alerts = [...alerts, ...phase.alerts];
+                    }
+                });
+             }
+
+             // Simulate Time Filtering for Alerts
+             // In real app, we would filter by timestamp. Here we just slice the array to simulate fewer alerts for shorter ranges.
+             // But actually, "Last 10m" should probably show fewer alerts than "Last 1h". 
+             // Since our mock alerts don't have real relative times to "now", let's just simulate count.
+             let filteredAlerts = alerts;
+             if (monitorTime === '10m') {
+                 // Show roughly 30% of alerts or max 2
+                 filteredAlerts = alerts.slice(0, Math.max(1, Math.floor(alerts.length * 0.3)));
+             } else if (monitorTime === '30m') {
+                 // Show roughly 60%
+                 filteredAlerts = alerts.slice(0, Math.max(2, Math.floor(alerts.length * 0.6)));
+             } else if (monitorTime === 'custom') {
+                 // Show random subset for custom range
+                 filteredAlerts = alerts.slice(0, Math.max(1, Math.floor(alerts.length * 0.4)));
+             }
+             // 1h shows all
+
+             drawerAlertCount.textContent = filteredAlerts.length;
+             
+             if (filteredAlerts.length === 0) {
+                 drawerAlertsBody.innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-center text-gray-400">暂无告警信息</td></tr>';
+             } else {
+                 drawerAlertsBody.innerHTML = filteredAlerts.map(alert => `
+                     <tr>
+                         <td class="px-4 py-2 text-gray-500 font-mono">${alert.time}</td>
+                         <td class="px-4 py-2 font-mono">${alert.host}</td>
+                         <td class="px-4 py-2 text-gray-700">${alert.message}</td>
+                         <td class="px-4 py-2">
+                             <span class="px-2 py-0.5 rounded text-[10px] font-bold ${alert.severity === 'Critical' ? 'bg-red-50 text-red-600' : 'bg-yellow-50 text-yellow-600'}">
+                                 ${alert.severity}
+                             </span>
+                         </td>
+                     </tr>
+                 `).join('');
+             }
+             
+             renderCharts();
+        };
 
         const toggleDrawer = (open) => {
             if (open) {
                 overlay.classList.remove('hidden');
+                renderDrawerContent();
+
                 setTimeout(() => {
                     overlay.classList.add('opacity-100');
                     drawer.classList.remove('translate-x-full');
-                    renderCharts(); // Render charts when drawer opens
                 }, 10);
             } else {
                 overlay.classList.remove('opacity-100');
@@ -514,45 +1176,96 @@
             }
         };
 
-        openBtn.addEventListener('click', () => toggleDrawer(true));
+        btnViewMonitor.addEventListener('click', () => toggleDrawer(true));
         closeBtn.addEventListener('click', () => toggleDrawer(false));
         overlay.addEventListener('click', () => toggleDrawer(false));
 
         // ApexCharts Configuration
         function renderCharts() {
+            // Mock data variation based on scope
+            const isOverall = monitorScope === 'overall';
+            
+            // Adjust categories based on time range
+            let categories = [];
+            let dataMultiplier = 1;
+
+            if (monitorTime === '10m') {
+                categories = ['11:21', '11:22', '11:23', '11:24', '11:25', '11:26', '11:27', '11:28', '11:29', '11:30'];
+                dataMultiplier = 1;
+            } else if (monitorTime === '30m') {
+                categories = ['11:00', '11:03', '11:06', '11:09', '11:12', '11:15', '11:18', '11:21', '11:24', '11:27', '11:30'];
+                dataMultiplier = 1.2; // slightly more variation
+            } else if (monitorTime === 'custom') {
+                // Generate labels based on inputs
+                const start = new Date(customStartTime.value || Date.now());
+                const end = new Date(customEndTime.value || Date.now());
+                categories = [];
+                // Prevent division by zero if start=end
+                const diff = (end - start) || 600000; 
+                const step = diff / 9;
+                
+                for(let i=0; i<10; i++) {
+                    const t = new Date(start.getTime() + step * i);
+                    const m = (t.getMonth()+1).toString().padStart(2,'0');
+                    const d = t.getDate().toString().padStart(2,'0');
+                    const h = t.getHours().toString().padStart(2,'0');
+                    const min = t.getMinutes().toString().padStart(2,'0');
+                    categories.push(`${m}-${d} ${h}:${min}`);
+                }
+                dataMultiplier = 2;
+            } else { // 1h
+                categories = ['10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30'];
+                dataMultiplier = 1.5;
+            }
+
+            // Helper to generate chart data
+            const generateData = (base, count) => {
+                return Array.from({length: count}, () => Math.floor(base * (0.8 + Math.random() * 0.4 * dataMultiplier)));
+            };
+
+            const dataLength = categories.length;
+
             // Latency Chart
+            const latencyBase = isOverall ? 18 : 14;
             const latencyOptions = {
-                series: [{ name: 'Latency', data: [12, 14, 13, 15, 18, 17, 16, 15, 14, 13] }],
+                series: [{ name: 'Latency', data: generateData(latencyBase, dataLength) }],
                 chart: { type: 'area', height: 250, toolbar: { show: false }, zoom: { enabled: false } },
                 colors: ['#003eb3'],
                 stroke: { curve: 'smooth', width: 2 },
                 fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.1 } },
-                xaxis: { categories: ['10:00', '10:10', '10:20', '10:30', '10:40', '10:50', '11:00', '11:10', '11:20', '11:30'] },
+                xaxis: { categories: categories },
                 grid: { borderColor: '#f1f1f1' }
             };
+            
+            // Destroy existing if needed (simple re-render here, in prod use updateOptions)
+            document.querySelector("#chart-latency").innerHTML = "";
             new ApexCharts(document.querySelector("#chart-latency"), latencyOptions).render();
 
             // Packet Rate Chart
             const packetOptions = {
-                series: [{ name: 'Retransmit %', data: [0.01, 0.02, 0.01, 0.05, 0.04, 0.02, 0.01, 0.01, 0.02, 0.01] }],
+                series: [{ name: 'Retransmit %', data: Array.from({length: dataLength}, () => (Math.random() * 0.05 * (isOverall ? 1.5 : 1)).toFixed(3)) }],
                 chart: { type: 'bar', height: 250, toolbar: { show: false } },
                 colors: ['#eab308'],
                 plotOptions: { bar: { borderRadius: 4, columnWidth: '60%' } },
-                xaxis: { categories: ['10:00', '10:10', '10:20', '10:30', '10:40', '10:50', '11:00', '11:10', '11:20', '11:30'] }
+                xaxis: { categories: categories }
             };
+            document.querySelector("#chart-packet").innerHTML = "";
             new ApexCharts(document.querySelector("#chart-packet"), packetOptions).render();
 
             // Resource Chart
+            const cpuBase = isOverall ? 60 : 50;
+            const memBase = isOverall ? 42 : 32;
             const resourceOptions = {
                 series: [
-                    { name: 'CPU %', data: [45, 52, 48, 61, 58, 55, 50, 48, 45, 42] },
-                    { name: 'Mem %', data: [30, 32, 31, 35, 34, 33, 32, 31, 30, 30] }
+                    { name: 'CPU %', data: generateData(cpuBase, dataLength) },
+                    { name: 'Mem %', data: generateData(memBase, dataLength) }
                 ],
                 chart: { type: 'line', height: 250, toolbar: { show: false } },
                 colors: ['#22c55e', '#3b82f6'],
                 stroke: { width: [3, 3], dashArray: [0, 8] },
-                xaxis: { categories: ['10:00', '10:10', '10:20', '10:30', '10:40', '10:50', '11:00', '11:10', '11:20', '11:30'] }
+                xaxis: { categories: categories }
             };
+            document.querySelector("#chart-resource").innerHTML = "";
             new ApexCharts(document.querySelector("#chart-resource"), resourceOptions).render();
         }
     </script>

@@ -6,6 +6,9 @@
     <title>变更风控 - 变更列表</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/zh.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -144,12 +147,14 @@
                     <table class="w-full text-left text-sm">
                         <thead class="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th class="px-6 py-4 font-semibold text-gray-600">变更标题</th>
-                                <th class="px-6 py-4 font-semibold text-gray-600">等级</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">变更标题/ID</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">变更等级</th>
                                 <th class="px-6 py-4 font-semibold text-gray-600">状态</th>
                                 <th class="px-6 py-4 font-semibold text-gray-600">审批单</th>
                                 <th class="px-6 py-4 font-semibold text-gray-600">变更模版</th>
-                                <th class="px-6 py-4 font-semibold text-gray-600">变更人</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">申请人</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">变更开始时间</th>
+                                <th class="px-6 py-4 font-semibold text-gray-600">执行单</th>
                                 <th class="px-6 py-4 font-semibold text-gray-600">进度</th>
                                 <th class="px-6 py-4 font-semibold text-gray-600">操作</th>
                             </tr>
@@ -204,8 +209,13 @@
                     <span class="text-sm font-bold text-gray-400">策略配置</span>
                 </div>
                 <!-- Step 4 -->
-                <div class="step-nav relative z-10 flex items-center gap-3 bg-gray-50 pl-4 opacity-50" data-step="4">
+                <div class="step-nav relative z-10 flex items-center gap-3 bg-gray-50 px-4 opacity-50" data-step="4">
                     <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">4</div>
+                    <span class="text-sm font-bold text-gray-400">变更管控</span>
+                </div>
+                <!-- Step 5 -->
+                <div class="step-nav relative z-10 flex items-center gap-3 bg-gray-50 pl-4 opacity-50" data-step="5">
+                    <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">5</div>
                     <span class="text-sm font-bold text-gray-400">预览提交</span>
                 </div>
             </div>
@@ -239,23 +249,71 @@
                 time: '2026-02-02 10:00',
                 level: 'P0',
                 status: '执行中',
-                oa: 'OA-20260202-001',
+                oa: 'https://approval.oa.com/123456',
                 template: 'RDMA Agent 配置变更',
                 user: '张三',
-                progress: 65,
-                count: '130/200'
+                progress: { current: 2, total: 4, percent: 50 },
+                execution_url: 'https://ops.platform.com/exec/111'
             },
             {
                 id: 'CHG-20260201-042',
                 title: '上海区域 Agent 版本例行升级',
                 time: '2026-02-01 14:30',
                 level: 'P1',
-                status: '已成功',
-                oa: 'OA-20260201-042',
+                status: '已完成',
+                oa: 'https://approval.oa.com/654321',
                 template: 'RDMA Agent 版本升级',
                 user: '李四',
-                progress: 100,
-                count: '500/500'
+                progress: { current: 5, total: 5, percent: 100 },
+                execution_url: 'https://ops.platform.com/exec/222'
+            },
+            {
+                id: 'CHG-20260203-005',
+                title: '广州区域网络扩容配置',
+                time: '2026-02-03 09:00',
+                level: 'P2',
+                status: '审批中',
+                oa: 'https://approval.oa.com/789012',
+                template: 'Switch Port Isolation',
+                user: '王五',
+                progress: { current: 0, total: 3, percent: 0 },
+                execution_url: ''
+            },
+            {
+                id: 'CHG-20260203-008',
+                title: '数据库参数调优',
+                time: '2026-02-03 11:00',
+                level: 'P1',
+                status: '审批拒绝',
+                oa: 'https://approval.oa.com/345678',
+                template: 'Modify CC Algorithm Config',
+                user: '赵六',
+                progress: { current: 0, total: 5, percent: 0 },
+                execution_url: ''
+            },
+            {
+                id: 'CHG-20260201-015',
+                title: '测试环境变更',
+                time: '2026-02-01 16:00',
+                level: 'P3',
+                status: '失败',
+                oa: 'https://approval.oa.com/901234',
+                template: 'RDMA 配置检查',
+                user: '孙七',
+                progress: { current: 1, total: 2, percent: 50 },
+                execution_url: 'https://ops.platform.com/exec/444'
+            },
+            {
+                id: 'CHG-20260204-001',
+                title: '紧急回滚操作',
+                time: '2026-02-04 08:00',
+                level: 'P0',
+                status: '审批通过',
+                oa: 'https://approval.oa.com/567890',
+                template: 'Emergency Rollback',
+                user: '周八',
+                progress: { current: 0, total: 1, percent: 0 },
+                execution_url: ''
             }
         ];
 
@@ -278,7 +336,12 @@
             scene: '日常变更 (Daily Change)',
             template: null,
             version: '',
-            strategy: '4 Batches (1%, 10%, 50%, 100%)'
+            strategy: '4 Batches (1%, 10%, 50%, 100%)',
+            approval: {
+                ticket: null,
+                status: 'pending', // pending, approved
+                notify: true
+            }
         };
 
         // --- Core Functions ---
@@ -319,38 +382,64 @@
         };
 
         const renderTable = (data) => {
-            tableBody.innerHTML = data.length ? '' : '<tr><td colspan="8" class="px-6 py-12 text-center text-gray-400">暂无数据</td></tr>';
+            tableBody.innerHTML = data.length ? '' : '<tr><td colspan="10" class="px-6 py-12 text-center text-gray-400">暂无数据</td></tr>';
             data.forEach(item => {
-                const statusColor = item.status === '执行中' ? 'blue' : (item.status === '已成功' ? 'green' : 'gray');
-                const levelColor = item.level === 'P0' ? 'red' : (item.level === 'P1' ? 'yellow' : 'blue');
+                let statusColor = 'gray';
+                if (item.status === '执行中') statusColor = 'blue';
+                else if (item.status === '已完成') statusColor = 'green';
+                else if (item.status === '失败' || item.status === '审批拒绝') statusColor = 'red';
+                else if (item.status === '审批中') statusColor = 'orange';
+                else if (item.status === '审批通过') statusColor = 'indigo';
+                else statusColor = 'gray';
+
+                const levelColor = item.level === 'P0' ? 'red' : (item.level === 'P1' ? 'orange' : (item.level === 'P2' ? 'yellow' : 'blue'));
                 
+                // Progress Bar Visualization
+                const totalBars = item.progress.total;
+                const currentBars = item.progress.current;
+                let progressHtml = `<div class="flex gap-0.5 w-16">`;
+                for (let i = 0; i < totalBars; i++) {
+                    const barColor = i < currentBars ? (item.status === '失败' ? 'bg-red-500' : 'bg-green-500') : 'bg-gray-200';
+                    progressHtml += `<div class="h-1.5 flex-1 rounded-sm ${barColor}"></div>`;
+                }
+                progressHtml += `</div><div class="text-[10px] text-gray-400 mt-1">${item.progress.current}/${item.progress.total}</div>`;
+
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-gray-50 transition-colors';
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-medium text-gray-900">${item.title}</td>
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-gray-900">${item.title}</div>
+                        <div class="text-xs text-gray-400 mt-0.5">${item.id}</div>
+                    </td>
                     <td class="px-6 py-4"><span class="px-2 py-1 bg-${levelColor}-50 text-${levelColor}-600 rounded text-xs font-bold">${item.level}</span></td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-${statusColor}-500"></span>
-                            <span class="text-gray-600">${item.status}</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-${statusColor}-500"></span>
+                            <span class="text-sm text-gray-600">${item.status}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-primary hover:underline cursor-pointer font-medium">${item.oa}</td>
+                    <td class="px-6 py-4">
+                         <a href="${item.oa}" target="_blank" class="text-primary hover:underline text-xs flex items-center gap-1">
+                            <i data-lucide="external-link" class="w-3 h-3"></i> 审批单
+                         </a>
+                    </td>
                     <td class="px-6 py-4 text-gray-500">${item.template}</td>
                     <td class="px-6 py-4 text-gray-600">${item.user}</td>
+                    <td class="px-6 py-4 text-gray-500 font-mono text-xs">${item.time}</td>
                     <td class="px-6 py-4">
-                        <div class="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-${statusColor}-500" style="width: ${item.progress}%"></div>
-                        </div>
-                        <div class="text-[10px] text-gray-400 mt-1">${item.count} Nodes</div>
+                        ${item.execution_url ? `<a href="${item.execution_url}" target="_blank" class="text-primary hover:underline text-xs flex items-center gap-1"><i data-lucide="play-circle" class="w-3 h-3"></i> 执行单</a>` : '<span class="text-gray-300 text-xs">-</span>'}
                     </td>
                     <td class="px-6 py-4">
-                        <button class="text-primary hover:text-blue-800 font-bold" onclick="location.href='detail.html'">详情</button>
+                        ${progressHtml}
+                    </td>
+                    <td class="px-6 py-4">
+                        <button class="text-primary hover:text-blue-800 font-bold text-sm" onclick="location.href='detail.html'">查看详情</button>
                     </td>
                 `;
                 tableBody.appendChild(tr);
             });
             dataCount.innerText = `共 ${data.length} 条数据`;
+            lucide.createIcons(); // Re-render icons for new rows
         };
 
         const renderStep = (step) => {
@@ -364,24 +453,100 @@
                             <label class="text-sm font-bold text-gray-700">变更标题 <span class="text-red-500">*</span></label>
                             <input type="text" id="fd-title" value="${formData.title}" placeholder="请输入变更标题" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
                         </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-bold text-gray-700">变更对象 <span class="text-red-500">*</span></label>
-                            <div class="border-2 border-dashed border-gray-200 rounded-xl p-12 flex flex-col items-center justify-center gap-4 bg-gray-50/50 hover:bg-gray-50 hover:border-primary/30 transition-all cursor-pointer">
-                                <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center text-primary">
-                                    <i data-lucide="database" class="w-6 h-6"></i>
+                        <div class="space-y-4">
+                            <label class="text-sm font-bold text-gray-700">变更对象 (Change Scope) <span class="text-red-500">*</span></label>
+                            
+                            <!-- Input Method Tabs -->
+                            <div class="flex gap-6 border-b border-gray-100 mb-2">
+                                <button id="tab-ip" class="tab-btn pb-2 text-sm font-bold text-primary border-b-2 border-primary" data-target="scope-input-area">IP 列表录入</button>
+                                <button id="tab-psm" class="tab-btn pb-2 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors" data-target="psm-select-area">PSM 选择</button>
+                                <button id="tab-file" class="tab-btn pb-2 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors" data-target="file-upload-area">主机文件上传</button>
+                            </div>
+
+                            <!-- IP Input Area -->
+                            <div id="scope-input-area" class="tab-content space-y-3 transition-all duration-300">
+                                <div class="relative">
+                                    <textarea id="ip-input" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm font-mono focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none" placeholder="请输入 IP 列表，每行一个或用逗号分隔..."></textarea>
+                                    <div class="absolute bottom-3 right-3 flex gap-2">
+                                        <button id="fill-test-data-btn" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs rounded transition-colors">填入测试数据</button>
+                                    </div>
                                 </div>
-                                <div class="text-center">
-                                    <p class="font-bold text-gray-700">点击选择或拖拽主机列表文件</p>
-                                    <p class="text-xs text-gray-400 mt-1">支持 CMDB 服务树选择、标签筛选或直接输入 IP</p>
+                                <div class="flex justify-end">
+                                     <button id="analyze-scope-btn" class="px-6 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all flex items-center gap-2 shadow-lg shadow-gray-200">
+                                        <i data-lucide="scan-search" class="w-4 h-4"></i>
+                                        解析与校验 (Analyze)
+                                     </button>
                                 </div>
+                            </div>
+
+                            <!-- PSM Selection Area -->
+                            <div id="psm-select-area" class="tab-content hidden space-y-4 transition-all duration-300">
+                                <div class="grid grid-cols-2 gap-4 h-64">
+                                    <!-- Left Column: PSM Selection -->
+                                    <div class="flex flex-col gap-2 h-full">
+                                        <div class="relative shrink-0">
+                                            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                            <input type="text" id="psm-search" placeholder="搜索 PSM..." class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                                        </div>
+                                        <div id="psm-list" class="flex-1 overflow-y-auto border border-gray-200 rounded-lg p-2 space-y-1 bg-white">
+                                            <!-- PSM List will be populated by JS -->
+                                            <div class="text-xs text-gray-400 text-center py-4">请输入关键词搜索 PSM</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right Column: IP Preview -->
+                                    <div class="flex flex-col gap-2 h-full">
+                                        <div class="text-xs font-bold text-gray-500 uppercase py-2.5 flex justify-between items-center">
+                                            <span>关联主机预览</span>
+                                            <span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Preview</span>
+                                        </div>
+                                        <div id="psm-ip-preview" class="flex-1 overflow-y-auto border border-gray-200 rounded-lg p-4 bg-gray-50 text-sm font-mono text-gray-600">
+                                            <div class="h-full flex flex-col items-center justify-center text-gray-400 gap-2">
+                                                <i data-lucide="monitor-off" class="w-8 h-8 opacity-20"></i>
+                                                <span class="text-xs">请在左侧选择 PSM 以查看主机</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end pt-2 border-t border-gray-100">
+                                     <button id="confirm-psm-btn" class="px-6 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all flex items-center gap-2 shadow-lg shadow-gray-200 opacity-50 cursor-not-allowed" disabled>
+                                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                        确认选择 (Confirm)
+                                     </button>
+                                </div>
+                            </div>
+
+                            <!-- File Upload Area -->
+                            <div id="file-upload-area" class="tab-content hidden space-y-3 transition-all duration-300">
+                                <div class="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center gap-4 bg-gray-50/50 hover:bg-gray-50 hover:border-primary/30 transition-all cursor-pointer relative group">
+                                    <input type="file" id="file-upload-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                    <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="font-bold text-gray-700">点击选择或拖拽主机列表文件</p>
+                                        <p class="text-xs text-gray-400 mt-1">支持 .txt, .csv, .xlsx 格式</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                     <button id="upload-test-btn" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all">
+                                        模拟上传测试文件
+                                     </button>
+                                </div>
+                            </div>
+
+                            <!-- Analysis Result Area -->
+                            <div id="scope-result-area" class="hidden space-y-4 animate-fade-in">
+                                <!-- Dynamic Content -->
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm font-bold text-gray-700">变更时间 <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <i data-lucide="calendar" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                    <input type="text" id="fd-time" value="${formData.time}" placeholder="开始时间 - 结束时间" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                                    <i data-lucide="calendar" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10"></i>
+                                    <input type="text" id="fd-time" value="${formData.time}" placeholder="请选择开始时间 - 结束时间" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-white cursor-pointer" readonly>
                                 </div>
                             </div>
                             <div class="space-y-2">
@@ -394,6 +559,410 @@
                         </div>
                     </div>
                 `;
+                
+                // --- Flatpickr Initialization ---
+                flatpickr("#fd-time", {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    mode: "range",
+                    locale: "zh",
+                    time_24hr: true,
+                    minDate: "today",
+                    onChange: function(selectedDates, dateStr, instance) {
+                        formData.time = dateStr;
+                    }
+                });
+                
+                // --- Tab Switching Logic ---
+                const tabs = document.querySelectorAll('.tab-btn');
+                const contents = document.querySelectorAll('.tab-content');
+                const resultArea = document.getElementById('scope-result-area');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Reset Active State
+                        tabs.forEach(t => {
+                            t.classList.remove('text-primary', 'border-primary', 'font-bold');
+                            t.classList.add('text-gray-400', 'font-medium', 'border-transparent');
+                            // Fix border-b style reset
+                            t.classList.remove('border-b-2');
+                        });
+                        
+                        // Set Active State
+                        tab.classList.add('text-primary', 'border-primary', 'font-bold', 'border-b-2');
+                        tab.classList.remove('text-gray-400', 'font-medium', 'border-transparent');
+
+                        // Show Target Content
+                        const targetId = tab.dataset.target;
+                        contents.forEach(c => c.classList.add('hidden'));
+                        document.getElementById(targetId).classList.remove('hidden');
+
+                        // Reset Result Area
+                        resultArea.innerHTML = '';
+                        resultArea.classList.add('hidden');
+                    });
+                });
+
+                // --- PSM Selection Logic ---
+                const psmSearch = document.getElementById('psm-search');
+                const psmList = document.getElementById('psm-list');
+                const confirmPsmBtn = document.getElementById('confirm-psm-btn');
+                const mockPsms = [
+                    'ec.payment.core', 'ec.order.core', 'ec.user.center', 
+                    'ec.promotion.activity', 'ec.logistics.delivery', 'infra.compute.k8s'
+                ];
+                let selectedPsm = null;
+
+                const renderPsmList = (filter = '') => {
+                    const filtered = mockPsms.filter(p => p.toLowerCase().includes(filter.toLowerCase()));
+                    if (filtered.length === 0) {
+                        psmList.innerHTML = `<div class="text-xs text-gray-400 text-center py-4">无匹配 PSM</div>`;
+                        return;
+                    }
+                    psmList.innerHTML = filtered.map(psm => `
+                        <div class="psm-item flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer ${selectedPsm === psm ? 'bg-blue-50' : ''}" onclick="selectPsm('${psm}')">
+                            <span class="text-sm text-gray-700 ${selectedPsm === psm ? 'font-bold text-primary' : ''}">${psm}</span>
+                            ${selectedPsm === psm ? '<i data-lucide="check" class="w-4 h-4 text-primary"></i>' : ''}
+                        </div>
+                    `).join('');
+                    lucide.createIcons();
+                };
+
+                window.selectPsm = (psm) => {
+                    selectedPsm = psm;
+                    renderPsmList(psmSearch.value);
+                    confirmPsmBtn.disabled = false;
+                    confirmPsmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                    // Render Mock IPs
+                    const ipPreview = document.getElementById('psm-ip-preview');
+                    // Generate mock IPs based on PSM name length to be somewhat consistent but random-looking
+                    const count = 12 + (psm.length % 5); 
+                    const mockIps = Array.from({length: count}, (_, i) => `10.${(psm.length * 10) % 255}.0.${i+1}`);
+                    
+                    ipPreview.innerHTML = `
+                        <div class="mb-3 text-xs text-gray-500 flex justify-between items-center sticky top-0 bg-gray-50 pb-2 border-b border-gray-200">
+                            <span class="font-bold text-gray-700">共 ${mockIps.length} 台主机</span>
+                            <span class="text-primary cursor-pointer hover:underline flex items-center gap-1">
+                                <i data-lucide="download" class="w-3 h-3"></i> 导出
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            ${mockIps.map(ip => `
+                                <div class="bg-white px-2 py-1.5 rounded border border-gray-200 text-xs text-gray-600 flex items-center gap-2 hover:border-primary/50 hover:text-primary transition-colors cursor-default">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                                    ${ip}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    lucide.createIcons();
+                };
+
+                psmSearch?.addEventListener('input', (e) => renderPsmList(e.target.value));
+                
+                // Initialize PSM List on Tab Click (Mock data load)
+                document.getElementById('tab-psm')?.addEventListener('click', () => {
+                     renderPsmList();
+                });
+
+                confirmPsmBtn?.addEventListener('click', () => {
+                     if (!selectedPsm) return;
+                     
+                     // Mock PSM Analysis Result (Large Dataset)
+                     const count = 10000;
+                     const mockIps = Array.from({length: count}, (_, i) => `10.${(i/255)|0}.${i%255}.${Math.floor(Math.random()*255)}`);
+                     
+                     // Store for download
+                     window.currentAnalysisResults = { [selectedPsm]: mockIps };
+
+                     const displayLimit = 50;
+                     const displayIPs = mockIps.slice(0, displayLimit);
+                     
+                     const html = `
+                        <div class="flex items-start gap-3 p-4 bg-green-50 border border-green-100 rounded-lg mb-4">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-green-600 shrink-0 mt-0.5"></i>
+                            <div class="space-y-1">
+                                <p class="text-sm font-bold text-green-900">PSM 选择成功</p>
+                                <p class="text-xs text-green-700">已选定 <span class="font-bold">${selectedPsm}</span>，关联机器共 ${count} 台。</p>
+                            </div>
+                        </div>
+
+                        <div class="border-2 border-primary bg-primary/5 rounded-xl overflow-hidden transition-all group">
+                            <label class="flex items-start justify-between p-4 cursor-pointer">
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="target-psm" value="${selectedPsm}" class="w-4 h-4 text-primary focus:ring-primary border-gray-300 mt-1" checked onchange="updateScopeSummary('${selectedPsm}')">
+                                    <div>
+                                        <div class="font-bold text-gray-800 text-base">${selectedPsm}</div>
+                                        <div class="text-xs text-gray-500 mt-1 flex items-center gap-2">
+                                            <span>包含 ${count} 个相关 IP</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end gap-2">
+                                    <div class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs font-mono font-bold">${count} IPs</div>
+                                </div>
+                            </label>
+                            
+                            <div class="px-4 pb-2 pl-11 flex gap-3">
+                                <button type="button" onclick="window.toggleIPList('${selectedPsm}')" class="text-xs text-primary hover:text-blue-700 font-medium flex items-center gap-1">
+                                    <i data-lucide="chevron-down" id="icon-${selectedPsm}" class="w-3 h-3 transition-transform"></i>
+                                    <span id="text-${selectedPsm}">展开 IP 列表</span>
+                                </button>
+                                <button type="button" onclick="window.downloadIPs('${selectedPsm}')" class="text-xs text-gray-500 hover:text-gray-700 font-medium flex items-center gap-1">
+                                    <i data-lucide="download" class="w-3 h-3"></i>
+                                    下载列表 (.txt)
+                                </button>
+                            </div>
+
+                            <div id="list-${selectedPsm}" class="hidden px-4 pb-4 pl-11 pt-2">
+                                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                    <div class="grid grid-cols-4 gap-2 text-xs font-mono text-gray-600 max-h-40 overflow-y-auto">
+                                        ${displayIPs.map(ip => `<div>${ip}</div>`).join('')}
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 text-xs text-center text-gray-400 italic">
+                                        还有 ${count - displayLimit} 个 IP 未显示，请下载完整列表查看
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     `;
+                     resultArea.innerHTML = html;
+                     resultArea.classList.remove('hidden');
+                     lucide.createIcons();
+                     updateScopeSummary(selectedPsm);
+                });
+
+                // --- File Upload Logic ---
+                document.getElementById('upload-test-btn')?.addEventListener('click', () => {
+                     // Mock File Upload Analysis (Large Dataset)
+                     const fileName = "hosts_list_v1.xlsx";
+                     const psm = 'ec.payment.core';
+                     const count = 5000;
+                     const mockIps = Array.from({length: count}, (_, i) => `10.1.${(i/255)|0}.${i%255}`);
+                     
+                     window.currentAnalysisResults = { [psm]: mockIps };
+                     
+                     const displayLimit = 50;
+                     const displayIPs = mockIps.slice(0, displayLimit);
+
+                     const html = `
+                        <div class="flex items-start gap-3 p-4 bg-blue-50 border border-blue-100 rounded-lg mb-4">
+                            <i data-lucide="file-check" class="w-5 h-5 text-blue-600 shrink-0 mt-0.5"></i>
+                            <div class="space-y-1">
+                                <p class="text-sm font-bold text-blue-900">文件解析成功: ${fileName}</p>
+                                <p class="text-xs text-blue-700">共识别 ${count} 个有效 IP，均属于 <span class="font-bold">${psm}</span>。</p>
+                            </div>
+                        </div>
+
+                        <div class="border-2 border-primary bg-primary/5 rounded-xl overflow-hidden transition-all group">
+                            <label class="flex items-start justify-between p-4 cursor-pointer">
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="target-psm" value="${psm}" class="w-4 h-4 text-primary focus:ring-primary border-gray-300 mt-1" checked onchange="updateScopeSummary('${psm}')">
+                                    <div>
+                                        <div class="font-bold text-gray-800 text-base">${psm}</div>
+                                        <div class="text-xs text-gray-500 mt-1 flex items-center gap-2">
+                                            <span>包含 ${count} 个相关 IP</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end gap-2">
+                                    <div class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs font-mono font-bold">${count} IPs</div>
+                                </div>
+                            </label>
+                            
+                            <div class="px-4 pb-2 pl-11 flex gap-3">
+                                <button type="button" onclick="window.toggleIPList('${psm}')" class="text-xs text-primary hover:text-blue-700 font-medium flex items-center gap-1">
+                                    <i data-lucide="chevron-down" id="icon-${psm}" class="w-3 h-3 transition-transform"></i>
+                                    <span id="text-${psm}">展开 IP 列表</span>
+                                </button>
+                                <button type="button" onclick="window.downloadIPs('${psm}')" class="text-xs text-gray-500 hover:text-gray-700 font-medium flex items-center gap-1">
+                                    <i data-lucide="download" class="w-3 h-3"></i>
+                                    下载列表 (.txt)
+                                </button>
+                            </div>
+
+                            <div id="list-${psm}" class="hidden px-4 pb-4 pl-11 pt-2">
+                                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                    <div class="grid grid-cols-4 gap-2 text-xs font-mono text-gray-600 max-h-40 overflow-y-auto">
+                                        ${displayIPs.map(ip => `<div>${ip}</div>`).join('')}
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 text-xs text-center text-gray-400 italic">
+                                        还有 ${count - displayLimit} 个 IP 未显示，请下载完整列表查看
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     `;
+                     resultArea.innerHTML = html;
+                     resultArea.classList.remove('hidden');
+                     lucide.createIcons();
+                     updateScopeSummary(psm);
+                });
+
+                // --- Step 1 Logic: Scope Analysis (IP List) ---
+                document.getElementById('fill-test-data-btn')?.addEventListener('click', () => {
+                    // Generate 1000 mock IPs for testing large datasets
+                    const testIPs = [];
+                    for (let i = 1; i <= 1000; i++) {
+                        testIPs.push(`10.0.${Math.floor(i / 255)}.${i % 255}`);
+                    }
+                    // Add some specific ones for logic testing
+                    testIPs.push('10.0.0.1', '10.0.0.2', '10.0.0.3'); 
+                    document.getElementById('ip-input').value = testIPs.join('\n');
+                    showToast('success', '已生成 1000+ 个测试 IP');
+                });
+
+                document.getElementById('analyze-scope-btn')?.addEventListener('click', () => {
+                    const input = document.getElementById('ip-input').value.trim();
+                    if (!input) {
+                        showToast('error', '请输入 IP 列表');
+                        return;
+                    }
+
+                    // Mock Analysis
+                    const ips = input.split(/[\n,]+/).map(ip => ip.trim()).filter(ip => ip);
+                    const mockMapping = {
+                        '10.0.0.1': ['ec.payment.core'],
+                        '10.0.0.2': ['ec.payment.core'],
+                        '10.0.0.3': ['ec.payment.core', 'ec.order.core'], // Dual homed
+                    };
+                    
+                    // Assign random PSMs to generated IPs
+                    ips.forEach(ip => {
+                        if (!mockMapping[ip]) {
+                            const rand = Math.random();
+                            if (rand > 0.7) mockMapping[ip] = ['ec.order.core'];
+                            else if (rand > 0.4) mockMapping[ip] = ['ec.user.center'];
+                            else mockMapping[ip] = ['ec.payment.core'];
+                        }
+                    });
+
+                    const psmGroups = {};
+                    const dualHomedIPs = [];
+
+                    ips.forEach(ip => {
+                        const psms = mockMapping[ip] || ['unknown.psm'];
+                        if (psms.length > 1) dualHomedIPs.push({ ip, psms });
+                        
+                        psms.forEach(psm => {
+                            if (!psmGroups[psm]) psmGroups[psm] = [];
+                            psmGroups[psm].push(ip);
+                        });
+                    });
+
+                    // Store for download
+                    window.currentAnalysisResults = psmGroups;
+
+                    const psms = Object.keys(psmGroups);
+                    const resultArea = document.getElementById('scope-result-area');
+                    
+                    if (psms.length === 0) {
+                         showToast('error', '未解析到有效 IP');
+                         return;
+                    }
+
+                    // Render Results
+                    let html = `
+                        <div class="flex items-start gap-3 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-600 shrink-0 mt-0.5"></i>
+                            <div class="space-y-1">
+                                <p class="text-sm font-bold text-blue-900">解析完成：共识别 ${ips.length} 个 IP</p>
+                                ${psms.length > 1 
+                                    ? `<p class="text-xs text-blue-700">检测到 IP 归属于多个 PSM，请选择本次变更的目标 PSM (单次变更仅支持一个 PSM)。</p>`
+                                    : `<p class="text-xs text-blue-700">所有 IP 均属于同一 PSM，已自动选中。</p>`
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <label class="text-xs font-bold text-gray-500 uppercase">目标 PSM 选择</label>
+                            <div class="space-y-3">
+                    `;
+
+                    psms.forEach((psm, index) => {
+                        const count = psmGroups[psm].length;
+                        const isChecked = index === 0 ? 'checked' : '';
+                        const ipList = psmGroups[psm];
+                        const displayLimit = 50;
+                        const hasMore = count > displayLimit;
+                        const displayIPs = ipList.slice(0, displayLimit);
+                        
+                        html += `
+                            <div class="border-2 border-gray-100 rounded-xl overflow-hidden transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5 bg-white group">
+                                <label class="flex items-start justify-between p-4 cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="radio" name="target-psm" value="${psm}" class="w-4 h-4 text-primary focus:ring-primary border-gray-300 mt-1" ${isChecked} onchange="updateScopeSummary('${psm}')">
+                                        <div>
+                                            <div class="font-bold text-gray-800 text-base">${psm}</div>
+                                            <div class="text-xs text-gray-500 mt-1 flex items-center gap-2">
+                                                <span>包含 ${count} 个相关 IP</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end gap-2">
+                                        <div class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs font-mono font-bold">${count} IPs</div>
+                                    </div>
+                                </label>
+                                
+                                <!-- Action Bar inside the card -->
+                                <div class="px-4 pb-2 pl-11 flex gap-3">
+                                    <button type="button" onclick="window.toggleIPList('${psm}')" class="text-xs text-primary hover:text-blue-700 font-medium flex items-center gap-1">
+                                        <i data-lucide="chevron-down" id="icon-${psm}" class="w-3 h-3 transition-transform"></i>
+                                        <span id="text-${psm}">展开 IP 列表</span>
+                                    </button>
+                                    <button type="button" onclick="window.downloadIPs('${psm}')" class="text-xs text-gray-500 hover:text-gray-700 font-medium flex items-center gap-1">
+                                        <i data-lucide="download" class="w-3 h-3"></i>
+                                        下载列表 (.txt)
+                                    </button>
+                                </div>
+
+                                <!-- Collapsible IP List -->
+                                <div id="list-${psm}" class="hidden px-4 pb-4 pl-11 pt-2">
+                                    <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                        <div class="grid grid-cols-4 gap-2 text-xs font-mono text-gray-600 max-h-40 overflow-y-auto">
+                                            ${displayIPs.map(ip => `<div>${ip}</div>`).join('')}
+                                        </div>
+                                        ${hasMore ? `
+                                            <div class="mt-2 pt-2 border-t border-gray-200 text-xs text-center text-gray-400 italic">
+                                                还有 ${count - displayLimit} 个 IP 未显示，请下载完整列表查看
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div></div>`;
+                    
+                    // Dual Homed Info
+                    if (dualHomedIPs.length > 0) {
+                        html += `
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-xs text-gray-400 mb-2 flex items-center gap-1">
+                                    <i data-lucide="git-merge" class="w-3 h-3"></i>
+                                    双挂/多挂机器说明 (${dualHomedIPs.length})
+                                </p>
+                                <div class="bg-gray-100 rounded p-3 text-xs text-gray-600 font-mono">
+                                    ${dualHomedIPs.map(d => `${d.ip} -> [${d.psms.join(', ')}]`).join('<br>')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    resultArea.innerHTML = html;
+                    resultArea.classList.remove('hidden');
+                    lucide.createIcons();
+                    
+                    // Trigger update for default selection
+                    updateScopeSummary(psms[0]);
+                });
+
+                // Helper to update summary text
+                window.updateScopeSummary = (psm) => {
+                    formData.targets = psm;
+                };
             } else if (step === 2) {
                 const templates = [
                     { 
@@ -504,8 +1073,8 @@
             } else if (step === 3) {
                 // Parse batches from strategy string
                 const batches = formData.strategy.match(/\d+%/g) || ['1%', '10%', '50%', '100%'];
-                const completedBatches = 1; // Mocking first batch as "current/started"
-                const progressWidth = ((completedBatches) / (batches.length - 1)) * 100;
+                const completedBatches = -1; // Default preview effect (no batches completed)
+                const progressWidth = completedBatches < 0 ? 0 : ((completedBatches) / (batches.length - 1)) * 100;
 
                 stepContent.innerHTML = `
                     <div class="space-y-6">
@@ -558,8 +1127,8 @@
                                 </h4>
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center text-sm">
-                                        <span class="text-gray-500">错误率阈值</span>
-                                        <span class="text-red-600 font-bold px-3 py-1 bg-red-50 rounded-lg">> 0.5%</span>
+                                        <span class="text-gray-500">告警订阅</span>
+                                        <span class="text-green-600 font-bold px-3 py-1 bg-green-50 rounded-lg">已启用</span>
                                     </div>
                                     <div class="flex justify-between items-center text-sm">
                                         <span class="text-gray-500">核心指标监控</span>
@@ -571,6 +1140,168 @@
                     </div>
                 `;
             } else if (step === 4) {
+                // Change Control Step
+                stepContent.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+                            <h3 class="text-sm font-bold text-gray-800 mb-6 flex items-center gap-2">
+                                <i data-lucide="file-signature" class="w-4 h-4 text-primary"></i>
+                                审批单集成 (Approval Integration)
+                            </h3>
+                            
+                            <!-- Scanning State -->
+                            <div id="approval-scan" class="flex flex-col items-center justify-center py-12">
+                                <div class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+                                <p class="text-sm text-gray-500">正在扫描关联审批单...</p>
+                            </div>
+
+                            <!-- Result State (Hidden by default) -->
+                            <div id="approval-result" class="hidden space-y-6">
+                                <!-- No Ticket Found -> Embedded Create Form -->
+                                <div id="no-ticket-ui" class="space-y-4">
+                                    <div class="bg-orange-50 border border-orange-100 rounded-lg p-4 flex items-start gap-3">
+                                        <i data-lucide="alert-circle" class="w-5 h-5 text-orange-500 shrink-0 mt-0.5"></i>
+                                        <div class="space-y-1">
+                                            <p class="text-sm font-bold text-orange-800">未检测到关联的审批单</p>
+                                            <p class="text-xs text-orange-700">请在下方手动创建新的审批申请。审批通过前无法执行变更。</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Embedded Mock Form -->
+                                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 bg-gray-50/50">
+                                        <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xs">OA</div>
+                                                <span class="font-bold text-gray-700 text-sm">OA 审批申请</span>
+                                            </div>
+                                            <span class="text-xs text-gray-400">External Embed</span>
+                                        </div>
+                                        <div class="space-y-4 opacity-70 pointer-events-none select-none filter blur-[0.5px]">
+                                            <div class="space-y-1">
+                                                <label class="text-xs font-bold text-gray-500">申请标题</label>
+                                                <input type="text" value="${formData.title} - 变更申请" class="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm" readonly>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div class="space-y-1">
+                                                    <label class="text-xs font-bold text-gray-500">申请人</label>
+                                                    <input type="text" value="Admin" class="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm" readonly>
+                                                </div>
+                                                <div class="space-y-1">
+                                                    <label class="text-xs font-bold text-gray-500">部门</label>
+                                                    <input type="text" value="基础架构部" class="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="space-y-1">
+                                                <label class="text-xs font-bold text-gray-500">变更内容摘要</label>
+                                                <textarea rows="2" class="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm" readonly>Template: ${formData.template?.title}, Strategy: ${formData.strategy}</textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex justify-center mt-6">
+                                            <button id="create-ticket-btn" class="px-6 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all shadow-lg shadow-primary/20">
+                                                自动填充并提交申请
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ticket Linked UI (Hidden initially) -->
+                                <div id="ticket-linked-ui" class="hidden">
+                                    <div class="bg-yellow-50 border border-yellow-100 rounded-lg p-4 flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-yellow-500 shadow-sm">
+                                                <i data-lucide="clock" class="w-5 h-5"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-bold text-yellow-900">审批单已提交</p>
+                                                <div class="flex items-center gap-2 mt-0.5">
+                                                    <span class="text-xs text-yellow-700 font-mono" id="linked-ticket-id">OA-xxxxxxxx</span>
+                                                    <span class="px-1.5 py-0.5 bg-yellow-100 text-yellow-700 rounded text-[10px] font-bold">待审批</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="text-xs text-yellow-700 hover:underline">查看详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+                            <h3 class="text-sm font-bold text-gray-800 mb-6 flex items-center gap-2">
+                                <i data-lucide="bell-ring" class="w-4 h-4 text-primary"></i>
+                                通知与同步 (Notification & Sync)
+                            </h3>
+                            <div class="space-y-4">
+                                <label class="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-[#00D6B9]/10 rounded-lg flex items-center justify-center text-[#00D6B9]">
+                                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-gray-800">飞书审批通知</div>
+                                            <div class="text-xs text-gray-500">发送审批卡片至飞书群/个人</div>
+                                        </div>
+                                    </div>
+                                    <input type="checkbox" id="feishu-notify" class="w-5 h-5 text-primary rounded border-gray-300 focus:ring-primary" checked>
+                                </label>
+
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg opacity-70">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-primary">
+                                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-gray-800">状态同步</div>
+                                            <div class="text-xs text-gray-500">审批状态将实时同步回变更平台</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-bold text-gray-400">自动开启</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Logic for Step 4
+                setTimeout(() => {
+                    document.getElementById('approval-scan')?.classList.add('hidden');
+                    const resultDiv = document.getElementById('approval-result');
+                    if (resultDiv) {
+                        resultDiv.classList.remove('hidden');
+                        
+                        // Check if we already have a ticket
+                        if (formData.approval.ticket) {
+                            document.getElementById('no-ticket-ui').classList.add('hidden');
+                            document.getElementById('ticket-linked-ui').classList.remove('hidden');
+                            document.getElementById('linked-ticket-id').innerText = formData.approval.ticket;
+                        } else {
+                            document.getElementById('no-ticket-ui').classList.remove('hidden');
+                            document.getElementById('ticket-linked-ui').classList.add('hidden');
+                        }
+                    }
+                }, 1000); // Simulate 1s scan
+
+                document.getElementById('create-ticket-btn')?.addEventListener('click', () => {
+                    const btn = document.getElementById('create-ticket-btn');
+                    btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> 提交中...`;
+                    btn.disabled = true;
+                    
+                    setTimeout(() => {
+                        const ticketId = 'OA-' + Math.floor(Math.random() * 10000000);
+                        formData.approval.ticket = ticketId;
+                        formData.approval.status = 'approved'; // Mock immediate approval for demo flow
+                        
+                        document.getElementById('no-ticket-ui').classList.add('hidden');
+                        document.getElementById('ticket-linked-ui').classList.remove('hidden');
+                        document.getElementById('linked-ticket-id').innerText = ticketId;
+                        showToast('success', '审批单创建成功并已自动关联');
+                        
+                        // Check Feishu notify
+                        formData.approval.notify = document.getElementById('feishu-notify').checked;
+                    }, 1500);
+                });
+
+            } else if (step === 5) {
                 stepContent.innerHTML = `
                     <div class="space-y-8">
                         <div class="flex items-center gap-6 p-6 bg-blue-50 border border-blue-100 rounded-2xl">
@@ -589,7 +1320,7 @@
                                 <p class="text-base font-bold text-gray-800">${formData.title}</p>
                             </div>
                             <div class="space-y-1">
-                                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">变更场景</label>
+                                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">变更标识</label>
                                 <p class="text-base font-bold text-gray-800">${formData.scene}</p>
                             </div>
                             <div class="space-y-1">
@@ -606,6 +1337,13 @@
                             <div class="space-y-1">
                                 <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">灰度策略</label>
                                 <p class="text-base font-bold text-gray-800">${formData.strategy}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">审批管控</label>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-bold">${formData.approval.ticket || 'Pending'}</span>
+                                    ${formData.approval.notify ? '<i data-lucide="message-square" class="w-4 h-4 text-[#00D6B9]" title="飞书通知已开启"></i>' : ''}
+                                </div>
                             </div>
                         </div>
 
@@ -664,7 +1402,7 @@
                 prevStepBtn.classList.add('hidden');
                 cancelDrawerBtn.classList.remove('hidden');
                 nextStepBtn.innerHTML = '<span>下一步</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
-            } else if (currentStep === 4) {
+            } else if (currentStep === 5) {
                 prevStepBtn.classList.remove('hidden');
                 cancelDrawerBtn.classList.add('hidden');
                 nextStepBtn.innerHTML = '<span>提交变更申请</span> <i data-lucide="send" class="w-4 h-4"></i>';
@@ -702,6 +1440,8 @@
             } else if (currentStep === 3) {
                 renderStep(4);
             } else if (currentStep === 4) {
+                renderStep(5);
+            } else if (currentStep === 5) {
                 // Submit logic
                 const newItem = {
                     id: `CHG-${new Date().getTime()}`,
@@ -770,6 +1510,41 @@
                 toggleIcon.style.transform = 'rotate(0deg)';
             }
         });
+
+        // Helper: Toggle IP List visibility
+        window.toggleIPList = (psm) => {
+            const list = document.getElementById(`list-${psm}`);
+            const icon = document.getElementById(`icon-${psm}`);
+            const text = document.getElementById(`text-${psm}`);
+            
+            if (list.classList.contains('hidden')) {
+                list.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+                text.innerText = '收起 IP 列表';
+            } else {
+                list.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+                text.innerText = '展开 IP 列表';
+            }
+        };
+
+        // Helper: Download IP List
+        window.downloadIPs = (psm) => {
+            const ipList = window.currentAnalysisResults[psm];
+            if (!ipList) return;
+            
+            const blob = new Blob([ipList.join('\n')], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${psm}_ips.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('success', `已开始下载 ${psm} 的 IP 列表（共 ${ipList.length} 个）`);
+        };
 
         // Initial Render
         renderTable(changeData);
