@@ -336,6 +336,9 @@
             scene: '日常变更 (Daily Change)',
             template: null,
             version: '',
+            level: '',
+            impact: '',
+            rollback: '',
             strategy: '4 Batches (1%, 10%, 50%, 100%)',
             approval: {
                 ticket: null,
@@ -359,6 +362,9 @@
                 currentStep = 1;
                 formData.title = '';
                 formData.template = null;
+                formData.level = '';
+                formData.impact = '';
+                formData.rollback = '';
             }
         };
 
@@ -1030,6 +1036,38 @@
                             </div>
                         `).join('')}
                     </div>
+
+                    <div class="mt-8 space-y-6 border-t border-gray-100 pt-8">
+                        <div class="grid grid-cols-2 gap-6">
+                            <!-- Change Level -->
+                            <div class="col-span-1">
+                                <label class="text-xs font-bold text-gray-700 mb-1.5 block">
+                                    变更等级 <span class="text-red-500">*</span>
+                                    <a href="#" class="text-blue-500 font-normal ml-1 hover:underline text-[10px]">(等级说明)</a>
+                                </label>
+                                <select class="change-level-select w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-gray-700 transition-all">
+                                    <option value="" disabled ${!formData.level ? 'selected' : ''}>请选择</option>
+                                    ${['L0', 'L1', 'L2', 'L3'].map(l => `<option value="${l}" ${formData.level === l ? 'selected' : ''}>${l}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Impact Scope -->
+                        <div>
+                            <label class="text-xs font-bold text-gray-700 mb-1.5 block">
+                                变更影响范围 <span class="text-red-500">*</span>
+                            </label>
+                            <textarea class="impact-scope-input w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-gray-700 transition-all h-24 resize-none" placeholder="填写变更的影响范围、潜在风险">${formData.impact || ''}</textarea>
+                        </div>
+
+                        <!-- Rollback Plan -->
+                        <div>
+                            <label class="text-xs font-bold text-gray-700 mb-1.5 block">
+                                回滚方案 <span class="text-red-500">*</span>
+                            </label>
+                            <textarea class="rollback-plan-input w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-gray-700 transition-all h-24 resize-none" placeholder="填写回滚方案概述">${formData.rollback || ''}</textarea>
+                        </div>
+                    </div>
                 `;
                 
                 // Card click handler
@@ -1069,6 +1107,19 @@
                         // Re-render to show selection state
                         renderStep(2);
                     });
+                });
+
+                // New fields handlers
+                document.querySelector('.change-level-select')?.addEventListener('change', (e) => {
+                    formData.level = e.target.value;
+                });
+
+                document.querySelector('.impact-scope-input')?.addEventListener('input', (e) => {
+                    formData.impact = e.target.value;
+                });
+
+                document.querySelector('.rollback-plan-input')?.addEventListener('input', (e) => {
+                    formData.rollback = e.target.value;
                 });
             } else if (step === 3) {
                 // Parse batches from strategy string
